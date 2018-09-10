@@ -1,6 +1,8 @@
-/*This script was written by Lane Schultz for MSE 760 */
-/*Cite me if you got help here*/
-/*Homework 1*/
+/*----------------------------------------------------
+This script was written by Lane Schultz for MSE 760
+Cite me if you got help here
+Homework 1
+----------------------------------------------------*/
 
 #include <iostream>
 #include <fstream>
@@ -42,6 +44,9 @@ int lattice_fcc(int n, float a)
     for(int i = 0; i < n; i++)
     {
 
+        outfile << i;
+        outfile << " ";
+
 	for(int j = 0; j < dimensions; j++)
 	{
 	    matrix[i][j] = atom1[j]+i*a;
@@ -50,6 +55,8 @@ int lattice_fcc(int n, float a)
 	}
 
 	outfile << "\n";
+        outfile << i;
+        outfile << " ";
 
         for(int j = 0; j < dimensions; j++)
         {
@@ -59,6 +66,8 @@ int lattice_fcc(int n, float a)
         }
 
         outfile << "\n";
+        outfile << i;
+        outfile << " ";
 
         for(int j = 0; j < dimensions; j++)
         {
@@ -68,6 +77,8 @@ int lattice_fcc(int n, float a)
         }
 
         outfile << "\n";
+        outfile << i;
+        outfile << " ";
 
         for(int j = 0; j < dimensions; j++)
         {
@@ -89,10 +100,10 @@ int lattice_fcc(int n, float a)
         delete matrix[i];
 }
 
-int main()
+int main(void)
 {
     int n = 5;                         // Number of unit cells
-    float a = 4.04092655671750;                   // Lattice constant 5.256
+    float a = 1;                   // Lattice constant 5.256 //4.04092655671750
     float result;
 
     result = lattice_fcc(n, a); 
