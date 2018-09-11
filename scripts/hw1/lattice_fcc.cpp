@@ -4,16 +4,18 @@ Cite me if you got help here
 Homework 1
 ----------------------------------------------------*/
 
-#include <iostream>
+#include <iostream>                         // Standard stream objects
 using namespace std;
 
 // Return the x, y, and z coordinates of atoms in FCC
-float** lattice_fcc(int n, float a)
+float** lattice_fcc(int n, float a, int *number, int *dim)
 {
     int initialatoms = 4;                  // The number of attoms in one unit cell
     int dimensions = 3;                    // The dimensions in space
     const int size = 2*n;                  // The size of the arrays
     const int atoms = initialatoms*n*n*n;  // The number of atoms in FCC
+    *number = atoms;
+    *dim = dimensions;
 
     float** matrix = new float*[atoms];    // Matrix to hold the output
     for(size_t i = 0; i < atoms; i++)
