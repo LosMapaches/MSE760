@@ -9,24 +9,19 @@ Homework 1
 using namespace std;
 
 // Function declaration
-int lattice_fcc(int n, float a);
+float** lattice_fcc(int n, float a);
 
 // Return the x, y, and z coordinates of atoms in FCC
-int lattice_fcc(int n, float a)
+float** lattice_fcc(int n, float a)
 {
-    std::ofstream outfile;               // Define the output file
-    outfile.open("coordinates.txt");     // The output file name
+    int initialatoms = 4;                  // The number of attoms in one unit cell
+    int dimensions = 3;                    // The dimensions in space
+    const int size = 2*n;                  // The size of the arrays
+    const int atoms = initialatoms*n*n*n;  // The number of atoms in FCC
 
-    int initialatoms = 4;          // The number of attoms in one unit cell
-    int dimensions = 3;            // The dimensions in space
-    const int size = 2*n;                // The size of the arrays
-    const int atoms = initialatoms*n*n*n;             // The number of atoms in FCC
-
-    float** matrix = new float*[atoms];  // Start a matrix to hold values
-
-    // Create N dimensions for each element
+    float** matrix = new float*[atoms];    // Matrix to hold the output
     for(size_t i = 0; i < atoms; i++)
-	matrix[i] = new float[dimensions];
+        matrix[i] = new float[dimensions];
 
     // First four atoms
     float xi[] = {a*0, a*0.5, a*0.5, a*0};
@@ -82,29 +77,43 @@ int lattice_fcc(int n, float a)
     }
     }
 
-    // Output text file
+    // Output
     for(int i = 0; i < atoms; i++)
     {
-        outfile << x[i] << " ";
-        outfile << y[i] << " ";
-        outfile << z[i] << " ";
-        outfile << "\n";
+        matrix[i][0] = x[i];
+        matrix[i][1] = y[i];
+        matrix[i][2] = z[i];
     }
 
-    // Close the output file
-    outfile.close();
+    return matrix;
 
-    // Delete matrix to free memory allocation
-    for(size_t i=0; i < size; i++)
+    // Delete matrix
+    for(size_t i = 0; i < atoms; i++)
         delete matrix[i];
+    delete matrix;
 }
 
 int main(void)
 {
-    int n = 5;                         // Number of unit cells
-    float a = 1;                   // Lattice constant 5.256 //4.04092655671750
-    float result;
+    std::ofstream outfile;                 // Define the output file
+    outfile.open("coordinates.txt");       // The output file name
 
-    result = lattice_fcc(n, a); 
+    int n = 5;                             // Number of unit cells
+    int dimensions = 3;                    // Dimension of problem
+    int atoms = n*n*n*4;                   // Number of atoms
+    float a = 5.256;                       // Lattice constant 5.256 [A]
+
+    float** result = lattice_fcc(n, a);
+
+    for(int i = 0; i < atoms; i++)
+    {
+        for(int j = 0; j < dimensions; j++)
+        {
+            outfile << result[i][j] << " ";
+        }
+        outfile << "\n";
+    }
+
+    outfile.close();
 }
 

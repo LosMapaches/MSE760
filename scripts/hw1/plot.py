@@ -13,13 +13,8 @@ with open('coordinates.txt') as file:
         z.append(value[2])
 
 
-n = 5
-
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 ax.scatter(x, y, z)
-ax.set_xlim(0, n)
-ax.set_ylim(0, n)
-ax.set_zlim(0, n)
 
 plt.show()
