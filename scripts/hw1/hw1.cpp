@@ -51,11 +51,34 @@ int lattice_fcc(int n, float a)
     {
     for(int j = 0; j < initialatoms; j++)
     {
-
         int index = (j+i*initialatoms);
         x[index] = x[j]+a*i;
         y[index] = y[j];
         z[index] = z[j];
+    }
+    }
+
+    // Repeat along y-axis
+    for(int i = 0; i < n; i++)
+    {
+    for(int j = 0; j < n*initialatoms; j++)
+    {
+        int index = (j+i*n*initialatoms);
+        x[index] = x[j];
+        y[index] = y[j]+a*i;
+        z[index] = z[j];
+    }
+    }
+
+    // Repeat along z-axis
+    for(int i = 0; i < n; i++)
+    {
+    for(int j = 0; j < n*n*initialatoms; j++)
+    {
+        int index = (j+i*n*n*initialatoms);
+        x[index] = x[j];
+        y[index] = y[j];
+        z[index] = z[j]+a*i;
     }
     }
 
