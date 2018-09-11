@@ -38,19 +38,34 @@ int lattice_fcc(int n, float a)
     float y[atoms] = {};
     float z[atoms] = {};
 
+    // Initial structure to be repeated
+    for(int i = 0; i < initialatoms; i++)
+    {
+        x[i] = xi[i];
+        y[i] = yi[i];
+        z[i] = zi[i];
+    }
+
+    // Repeat along x-axis
     for(int i = 0; i < n; i++)
     {
-        for(int j = 0; j < initialatoms; j++)
-        {
-            x[i] = xi[j]+a*i;
-            y[i] = yi[j]+a*i;
-            z[i] = zi[j]+a*i;
-            outfile << x[i] << " ";
-            outfile << y[i] << " ";
-            outfile << z[i] << " ";
-            outfile << "\n";
-        }
+    for(int j = 0; j < initialatoms; j++)
+    {
 
+        int index = (j+i*initialatoms);
+        x[index] = x[j]+a*i;
+        y[index] = y[j];
+        z[index] = z[j];
+    }
+    }
+
+    // Output text file
+    for(int i = 0; i < atoms; i++)
+    {
+        outfile << x[i] << " ";
+        outfile << y[i] << " ";
+        outfile << z[i] << " ";
+        outfile << "\n";
     }
 
     // Close the output file
