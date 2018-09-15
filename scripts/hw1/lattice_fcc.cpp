@@ -1,35 +1,31 @@
 /*----------------------------------------------------
-This script was written by Lane Schultz for MSE 760
-Cite me if you got help here
-Homework 1
+This script creates an fcc lattice in 3D
 ----------------------------------------------------*/
 
-#include <iostream>                         // Standard stream objects
-using namespace std;
-
 // Return the x, y, and z coordinates of atoms in FCC
-float** lattice_fcc(int n, float a, int *number, int *dim)
+long double **lattice_fcc(int n, long double a, int *number, int *dim)
 {
     int initialatoms = 4;                  // The number of attoms in one unit cell
     int dimensions = 3;                    // The dimensions in space
     const int size = 2*n;                  // The size of the arrays
     const int atoms = initialatoms*n*n*n;  // The number of atoms in FCC
+
     *number = atoms;
     *dim = dimensions;
 
-    float** matrix = new float*[atoms];    // Matrix to hold the output
+    long double **matrix = new long double *[atoms]; // Matrix to hold the output
     for(size_t i = 0; i < atoms; i++)
-        matrix[i] = new float[dimensions];
+        matrix[i] = new long double[dimensions];
 
     // First four atoms
-    float xi[] = {a*0, a*0.5, a*0.5, a*0};
-    float yi[] = {a*0, a*0.5, a*0, a*0.5};
-    float zi[] = {a*0, a*0, a*0.5, a*0.5};
+    long double xi[] = {a*0, a*0.5, a*0.5, a*0};
+    long double yi[] = {a*0, a*0.5, a*0, a*0.5};
+    long double zi[] = {a*0, a*0, a*0.5, a*0.5};
 
     // The coordinates of the problem
-    float x[atoms] = {};
-    float y[atoms] = {};
-    float z[atoms] = {};
+    long double x[atoms] = {};
+    long double y[atoms] = {};
+    long double z[atoms] = {};
 
     // Initial structure to be repeated
     for(int i = 0; i < initialatoms; i++)
