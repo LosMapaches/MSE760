@@ -5,6 +5,7 @@ Homework 1
 ----------------------------------------------------*/
 
 #include <stdio.h>
+
 #include <fstream>                         // Use output file
 #include "lattice_fcc.cpp"                 // FCC creator
 #include "energy_lj.cpp"                   // LJ energy
