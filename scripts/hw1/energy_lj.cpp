@@ -1,6 +1,9 @@
 /*----------------------------------------------------
-This script creates an fcc lattice in 3D
+This scripts calculates the cohesive energy for a 
+system with the Lennard-Jones potential.
 ----------------------------------------------------*/
+
+#include <stdio.h>
 
 #include <math.h>
 #include "reduced_units.cpp"
@@ -9,6 +12,8 @@ This script creates an fcc lattice in 3D
 // Return the leonard jones energy of the system
 long double energy_lj(
                       long double **array,
+                      long double l,
+                      int         periodic,
                       int         atoms,
                       long double sigma,
                       long double epsilon,
@@ -38,6 +43,8 @@ long double energy_lj(
     long double utot;
     long double uout;
 
+    long double rl = reduced_units(sigma, epsilon, m, 1, l);
+
     utot = 0;
     for(int i = 0; i < atoms - 1; i++)
     {
@@ -51,9 +58,41 @@ long double energy_lj(
             yj = reduced_units(sigma, epsilon, m, 1, array[j][1]);
             zj = reduced_units(sigma, epsilon, m, 1, array[j][2]);
 
-            dx = xi-xj;
-            dy = yi-yj;
-            dz = zi-zj;
+            switch(periodic)
+            {
+            case 0:                     // No periodic boundary
+
+                dx = xi-xj;
+                dy = yi-yj;
+                dz = zi-zj;
+
+            break;
+
+            case 1:                     // Periodic boundary
+
+                if(xi-xj < -rl/2)
+                    dx = xi-xj+rl;
+                else if(xi-xj > rl/2)
+                    dx = xi-xj-rl;
+                else
+                    dx = xi-xj;
+
+                if(yi-yj < -rl/2)
+                    dy = yi-yj+rl;
+                else if(yi-yj > rl/2)
+                    dy = yi-yj-rl;
+                else
+                    dy = yi-yj;
+
+                if(zi-zj < -rl/2)
+                    dz = zi-zj+rl;
+                else if(zi-zj > rl/2)
+                    dz = zi-zj-rl;
+                else
+                    dz = zi-zj;
+
+            break;
+            }
 
             distance = sqrt(pow(dx, 2)+pow(dy, 2)+pow(dz, 2));
 
