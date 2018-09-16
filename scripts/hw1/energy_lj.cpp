@@ -3,8 +3,6 @@ This scripts calculates the cohesive energy for a
 system with the Lennard-Jones potential.
 ----------------------------------------------------*/
 
-#include <stdio.h>
-
 #include <math.h>
 #include "reduced_units.cpp"
 #include "unreduced_units.cpp"

@@ -5,6 +5,7 @@ x = []
 y = []
 z = []
 with open('coordinates.txt') as file:
+    next(file)
     for line in file:
         value = line.strip().split(' ')
         value = [float(i) for i in value]

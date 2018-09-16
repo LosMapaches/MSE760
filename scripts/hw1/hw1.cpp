@@ -29,7 +29,9 @@ main()
     int atoms;                             // Number of atoms
     
     long double **array = lattice_fcc(n, a, &atoms, &dimensions);
-    
+
+    outfile << "x [m] y [m] z [m] \n";
+
     for(int i = 0; i < atoms; i++)
     {
         for(int j = 0; j < dimensions; j++)
@@ -42,14 +44,15 @@ main()
     outfile.close();                       // Close output file
 
     // Set a loop to spit out cohesive energy for multiple system sizes
-    for(int k = 1; k <= 10; k++)
+    outfilecoh << "N E_non-periodic [eV] E_periodic [eV] \n";
+    for(int k = 1; k <= 20; k++)
     {
-        int n = k;                             // Number of units cells [-]
-        long double l = n*a;                   // Side length [m]
+        int n = k;                         // Number of units cells [-]
+        long double l = n*a;               // Side length [m]
 
         /* Grab the atom coordinates for FCC structure */
-        int dimensions;                        // Dimension of problem
-        int atoms;                             // Number of atoms
+        int dimensions;                    // Dimension of problem
+        int atoms;                         // Number of atoms
 
         long double **array = lattice_fcc(n, a, &atoms, &dimensions);
 
@@ -65,4 +68,3 @@ main()
     }
     outfilecoh.close();
 }
-
