@@ -2,8 +2,6 @@
 This script creates an fcc lattice in 3D
 ----------------------------------------------------*/
 
-#include <stdio.h>
-
 #include <math.h>
 #include "reduced_units.cpp"
 #include "unreduced_units.cpp"

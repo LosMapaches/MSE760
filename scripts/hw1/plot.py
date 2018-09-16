@@ -1,5 +1,5 @@
 from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as pl
 
 x = []
 y = []
@@ -13,8 +13,12 @@ with open('coordinates.txt') as file:
         z.append(value[2])
 
 
-fig = plt.figure()
+fig = pl.figure()
 ax = fig.add_subplot(111, projection='3d')
 ax.scatter(x, y, z)
+ax.set_xlabel('Distance [m]')
+ax.set_ylabel('Distance [m]')
+ax.set_zlabel('Distance [m]')
 
-plt.show()
+pl.show()
+pl.clf()
