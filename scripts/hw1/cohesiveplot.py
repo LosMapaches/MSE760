@@ -12,12 +12,14 @@ with open('cohesive.txt') as file:
         e.append(float(value[1]))
         ep.append(float(value[2]))
 
+n = [int(i) for i in n]
 a = 5.256*10**-10
 x = [a*i**3 for i in n]
 
-pl.plot(x, e, '.')
-pl.plot(x, ep, '.')
-pl.xlabel('Volume [m^3]')
+pl.plot(n, e, '.')
+pl.plot(n, ep, '.')
+pl.xticks(n)
+pl.xlabel('Number of Unit Cells [^(1/3)]')
 pl.ylabel('Eth [eV]')
 pl.grid(b=True, which='both')
 pl.tight_layout()
