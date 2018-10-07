@@ -15,7 +15,7 @@ long double **lattice_fcc(int n, long double a, int *number, int *dim)
 
     long double **matrix = new long double *[atoms]; // Matrix to hold the output
     for(size_t i = 0; i < atoms; i++)
-        matrix[i] = new long double[dimensions];
+        matrix[i] = new long double [dimensions];
 
     // First four atoms
     long double xi[] = {a*0.0, a*0.5, a*0.5, a*0.0};
