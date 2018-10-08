@@ -30,27 +30,25 @@ main()
     long double energy;
 
     // Set a loop to spit out cohesive energy for multiple system sizes
-    coordinates << "x y z \n";
 
     long double **array = lattice_fcc(n, ared, &atoms, &dimensions);
 
     long double **acc = force_energy_lj(array, l, 1, atoms, &energy);
 
+    coordinates << "atom x[N] y[N] z[N]";
+    coordinates << "\n";
     for(int i=0; i<atoms; i++)
     {
-        printf("%Lf", acc[i][0]);
-        printf(" ");
-        printf("%Lf", acc[i][1]);
-        printf(" ");
-        printf("%Lf", acc[i][2]);
-        printf(" ");
-        printf("\n");
+        coordinates << i << " ";
+        coordinates << unreduced_units(m, 5, acc[i][0]) << " ";
+        coordinates << unreduced_units(m, 5, acc[i][1]) << " ";
+        coordinates << unreduced_units(m, 5, acc[i][2]) << " ";
+        coordinates << "\n";
 
     }
 
     long double ucoh = unreduced_units(m, 2, energy)/atoms;
     printf("%Lf", ucoh);
 
-    coordinates << ucoh << "\n";
     coordinates.close();
 }

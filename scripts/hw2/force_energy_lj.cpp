@@ -46,9 +46,6 @@ long double **force_energy_lj(
     long double ay;
     long double az;
 
-    // Distances between atom pairs
-    long double dist[atoms];
-
     // Matrix to hold acceleration values
     long double **acc = new long double *[atoms];
     for(size_t i = 0; i < atoms; i++)
@@ -118,11 +115,19 @@ long double **force_energy_lj(
             ay += a*dy;
             az += a*dz;
 
+            acc[i][0] += ax;
+            acc[i][1] += ay;
+            acc[i][2] += az;
+
+            acc[j][0] -= ax;
+            acc[j][1] -= ay;
+            acc[j][2] -= az;
+
         }
 
-        acc[i][0] = 48.0*ax;
-        acc[i][1] = 48.0*ay;
-        acc[i][2] = 48.0*az;
+        acc[i][0] *= 48.0;
+        acc[i][1] *= 48.0;
+        acc[i][2] *= 48.0;
 
     }
 
