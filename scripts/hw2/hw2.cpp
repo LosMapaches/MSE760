@@ -37,18 +37,19 @@ main()
 
     coordinates << "atom x[N] y[N] z[N]";
     coordinates << "\n";
-    for(int i=0; i<atoms; i++)
+    for(int i = 0; i < atoms; i++)
     {
         coordinates << i << " ";
-        coordinates << unreduced_units(m, 5, acc[i][0]) << " ";
-        coordinates << unreduced_units(m, 5, acc[i][1]) << " ";
-        coordinates << unreduced_units(m, 5, acc[i][2]) << " ";
+        coordinates << unreduced_units(m, 5, acc[i][0])*1.602e-19 << " ";
+        coordinates << unreduced_units(m, 5, acc[i][1])*1.602e-19 << " ";
+        coordinates << unreduced_units(m, 5, acc[i][2])*1.602e-19 << " ";
         coordinates << "\n";
 
     }
 
     long double ucoh = unreduced_units(m, 2, energy)/atoms;
     printf("%Lf", ucoh);
+    printf("\n");
 
     coordinates.close();
 }

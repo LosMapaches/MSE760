@@ -42,9 +42,9 @@ long double **force_energy_lj(
 
     // Acceleration
     long double a;
-    long double ax;
-    long double ay;
-    long double az;
+    long double ax = 0;
+    long double ay = 0;
+    long double az = 0;
 
     // Matrix to hold acceleration values
     long double **acc = new long double *[atoms];
@@ -57,10 +57,6 @@ long double **force_energy_lj(
         xi = array[i][0];
         yi = array[i][1];
         zi = array[i][2];
-
-        ax = 0;
-        ay = 0;
-        az = 0;
 
         for(int j = i + 1; j < atoms; j++)
         {
@@ -109,7 +105,8 @@ long double **force_energy_lj(
             u = 1.0/pow(distance, 12)-1.0/pow(distance, 6);
             utot +=u;
 
-            a = 1.0/pow(distance, 14)-1.0/pow(2.0*distance, 8);
+            a = 1.0/pow(distance, 14)-0.5/pow(distance, 8);
+            a *= 48.0;
 
             ax += a*dx;
             ay += a*dy;
@@ -124,11 +121,6 @@ long double **force_energy_lj(
             acc[j][2] -= az;
 
         }
-
-        acc[i][0] *= 48.0;
-        acc[i][1] *= 48.0;
-        acc[i][2] *= 48.0;
-
     }
 
     *energy = utot*4.0;
