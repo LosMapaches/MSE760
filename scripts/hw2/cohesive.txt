@@ -1,0 +1,2 @@
+N E_non-periodic [eV] E_periodic [eV] 
+1 -0.0143829

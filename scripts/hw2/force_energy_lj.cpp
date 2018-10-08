@@ -10,12 +10,13 @@ Also returns the acceleration coordinates for atoms.
 #include "unreduced_units.cpp"
 
 // Return the leonard jones energy of the system
-long double energy_lj(
-                      long double **array,
-                      long double l,
-                      int         periodic,
-                      int         atoms
-                      )
+long double **force_energy_lj(
+                              long double **array,
+                              long double l,
+                              int         periodic,
+                              int         atoms,
+                              long double *energy
+                              )
 {
     // The coordinates of the i atom
     long double xi;
@@ -38,16 +39,15 @@ long double energy_lj(
     // The energy between atoms
     long double u;
     long double utot;
-    long double uout;
 
     // Acceleration
     long double a;
     long double ax;
     long double ay;
     long double az;
-    long double axtot;
-    long double aytot;
-    long double aztot;
+
+    // Distances between atom pairs
+    long double dist[atoms];
 
     // Matrix to hold acceleration values
     long double **acc = new long double *[atoms];
@@ -61,9 +61,9 @@ long double energy_lj(
         yi = array[i][1];
         zi = array[i][2];
 
-        axtot = 0;
-        aytot = 0;
-        aztot = 0;
+        ax = 0;
+        ay = 0;
+        az = 0;
 
         for(int j = i + 1; j < atoms; j++)
         {
@@ -114,36 +114,22 @@ long double energy_lj(
 
             a = 1.0/pow(distance, 14)-1.0/pow(2.0*distance, 8);
 
-            ax = a*dx;
-            ay = a*dy;
-            az = a*dz;
-
-            axtot += ax;
-            aytot += ay;
-            aztot += az;
+            ax += a*dx;
+            ay += a*dy;
+            az += a*dz;
 
         }
 
-        acc[i][0] = 48.0*axtot;
-        acc[i][1] = 48.0*aytot;
-        acc[i][2] = 48.0*aztot;
-
-        printf("%Lf", acc[i][0]);
-        printf(" ");
-
-        printf("%Lf", acc[i][1]);
-        printf(" ");
-
-        printf("%Lf", acc[i][2]);
-        printf(" ");
-
-        printf("\n");
+        acc[i][0] = 48.0*ax;
+        acc[i][1] = 48.0*ay;
+        acc[i][2] = 48.0*az;
 
     }
 
-    uout = utot*4.0;
+    *energy = utot*4.0;
+    
 
-    return uout;
+    return acc;
 
     // Delete the matrix
     for(size_t i = 0; i < atoms; i++)
