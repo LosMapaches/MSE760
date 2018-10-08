@@ -3,11 +3,8 @@ This scripts calculates the cohesive energy for a
 system with the Lennard-Jones potential.
 Also returns the acceleration coordinates for atoms.
 ----------------------------------------------------*/
-#include <stdio.h>
 
 #include <math.h>
-#include "reduced_units.cpp"
-#include "unreduced_units.cpp"
 
 // Return the leonard jones energy of the system
 long double **force_energy_lj(
@@ -106,7 +103,6 @@ long double **force_energy_lj(
             utot +=u;
 
             a = 1.0/pow(distance, 14)-0.5/pow(distance, 8);
-            a *= 48.0;
 
             ax += a*dx;
             ay += a*dy;
@@ -121,7 +117,17 @@ long double **force_energy_lj(
             acc[j][2] -= az;
 
         }
+
+        acc[i][0] *= 48.0;
+        acc[i][1] *= 48.0;
+        acc[i][2] *= 48.0;
+
     }
+
+    // The last atom multiplication
+    acc[atoms-1][0] *= 48.0;
+    acc[atoms-1][1] *= 48.0;
+    acc[atoms-1][3] *= 48.0;
 
     *energy = utot*4.0;
     
