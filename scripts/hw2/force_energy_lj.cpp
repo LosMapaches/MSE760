@@ -20,10 +20,9 @@ long double **force_energy_lj(
     long double yi;
     long double zi;
 
-    // The coordinates of the j atom
-    long double xj;
-    long double yj;
-    long double zj;
+    // Half lengths
+    long double poshalf = l/2.0;
+    long double neghalf = -poshalf;
 
     // The difference between vectors
     long double dx;
@@ -39,16 +38,16 @@ long double **force_energy_lj(
 
     // Acceleration
     long double a;
-    long double ax = 0;
-    long double ay = 0;
-    long double az = 0;
+    long double ax = 0.0;
+    long double ay = 0.0;
+    long double az = 0.0;
 
     // Matrix to hold acceleration values
     long double **acc = new long double *[atoms];
     for(size_t i = 0; i < atoms; i++)
         acc[i] = new long double [3];
 
-    utot = 0;
+    utot = 0.0;
     for(int i = 0; i < atoms - 1; i++)
     {
         xi = array[i][0];
@@ -57,42 +56,39 @@ long double **force_energy_lj(
 
         for(int j = i + 1; j < atoms; j++)
         {
-            xj = array[j][0];
-            yj = array[j][1];
-            zj = array[j][2];
 
             switch(periodic)
             {
             case 0:                     // No periodic boundary
 
-                dx = xi-xj;
-                dy = yi-yj;
-                dz = zi-zj;
+                dx = xi-array[j][0];
+                dy = yi-array[j][1];
+                dz = zi-array[j][2];
 
             break;
 
             case 1:                     // Periodic boundary
 
-                if(xi-xj < -l/2)
-                    dx = xi-xj+l;
-                else if(xi-xj > l/2)
-                    dx = xi-xj-l;
+                if(xi-array[j][0] < neghalf)
+                    dx = xi-array[j][0]+l;
+                else if(xi-array[j][0] > poshalf)
+                    dx = xi-array[j][0]-l;
                 else
-                    dx = xi-xj;
+                    dx = xi-array[j][0];
 
-                if(yi-yj < -l/2)
-                    dy = yi-yj+l;
-                else if(yi-yj > l/2)
-                    dy = yi-yj-l;
+                if(yi-array[j][1] < neghalf)
+                    dy = yi-array[j][1]+l;
+                else if(yi-array[j][1] > poshalf)
+                    dy = yi-array[j][1]-l;
                 else
-                    dy = yi-yj;
+                    dy = yi-array[j][1];
 
-                if(zi-zj < -l/2)
-                    dz = zi-zj+l;
-                else if(zi-zj > l/2)
-                    dz = zi-zj-l;
+                if(zi-array[j][2] < neghalf)
+                    dz = zi-array[j][2]+l;
+                else if(zi-array[j][2] > poshalf)
+                    dz = zi-array[j][2]-l;
                 else
-                    dz = zi-zj;
+                    dz = zi-array[j][2];
 
             break;
             }
