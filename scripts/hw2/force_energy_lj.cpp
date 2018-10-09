@@ -130,7 +130,6 @@ long double **force_energy_lj(
     acc[atoms-1][3] *= 48.0;
 
     *energy = utot*4.0;
-    
 
     return acc;
 

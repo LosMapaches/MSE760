@@ -2,7 +2,6 @@
 This script randomly assigns velocities to atoms.
 It is assumed that all atoms have the same velocity magnitude.
 ----------------------------------------------------------------------------*/
-#include <stdio.h>
 
 #include <cstdlib>                            // Random number generator
 
