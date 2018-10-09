@@ -11,7 +11,7 @@ Homework 2
 #include "reduced_units.cpp"               // Reduce units
 #include "unreduced_units.cpp"             // Unreduce units
 #include "velocities.cpp"                  // Random velocities
-#include "simulation.cpp"                  // Simulate
+//#include "simulation.cpp"                  // Simulate
 
 main()
 {
@@ -69,7 +69,7 @@ main()
     printf("\n");
 
     int steps = 10; // The number of run steps
-    long double **r = simulate(atoms, steps, l, Tred, timestepred, array);
+    //long double **r = simulate(atoms, steps, l, Tred, timestepred, array);
 
     coordinates.close();
 }
