@@ -7,10 +7,11 @@ Homework 2
 #include <fstream>                         // Use output file
 
 #include "lattice_fcc.cpp"                 // FCC creator
-#include "force_energy_lj.cpp"             // LJ energy
+#include "force_energy_lj.cpp"             // LJ energy and accelerations
 #include "reduced_units.cpp"               // Reduce units
 #include "unreduced_units.cpp"             // Unreduce units
 #include "velocities.cpp"                  // Random velocities
+#include "simulation.cpp"                  // Simulate
 
 main()
 {
@@ -19,12 +20,18 @@ main()
 
     long double a = 5.7e-10;               // Lattice constant [m]
     long double m = 6.6e-23;               // Mass [g]
+    long double T = 300.0;                 // Temperature [K]
+    long double t = 2.2e-11;               // Time [s]
+    long double timestep = 0.001e-12;      // Time step [s/step]
 
-    int n = 2;                             // Number of units cells [-]
+    int n = 5;                             // Number of units cells [-]
 
-    // Reduce the lattice constant
+    // Reduced units
     long double ared = reduced_units(m, 1, a);
-    long double l = n*ared;                // Side length [m]
+    long double tred = reduced_units(m, 4, t);
+    long double timestepred = reduced_units(m, 4, timestep);
+    long double Tred = reduced_units(m, 3, T);
+    long double l = n*ared;                // Side length
 
     // Grab the atom coordinates for FCC structure
     int dimensions;                        // Dimension of problem
@@ -50,9 +57,8 @@ main()
     }
 
     // The random velocity coordinates for each atom
-    long double temperature = reduced_units(m, 3, 300.0);
     long double temp;  // To check temperature at end
-    long double **vel = velocities(atoms, temperature, &temp);
+    long double **vel = velocities(atoms, Tred, &temp);
  
     printf("Temperature: %Lf [K]", unreduced_units(m, 3, temp));
     printf("\n");
@@ -61,6 +67,9 @@ main()
     long double ucoh = unreduced_units(m, 2, energy)/atoms;
     printf("Cohesive Energy: %Lf [eV]", ucoh);
     printf("\n");
+
+    int steps = 10; // The number of run steps
+    long double **r = simulate(atoms, steps, l, Tred, timestepred, array);
 
     coordinates.close();
 }
