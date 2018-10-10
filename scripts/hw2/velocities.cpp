@@ -67,6 +67,9 @@ long double **velocities(int atoms, long double temperature, long double *tempch
 
     return vel;
 
+    // Delete pointer
+    delete tempcheck;
+
     // Delete the matrix
     for(size_t i = 0; i < atoms; i++)
         delete vel[i];

@@ -81,6 +81,10 @@ long double **lattice_fcc(int n, long double a, int *number, int *dim)
 
     return matrix;
 
+    // Delete pointers
+    delete number;
+    delete dim;
+
     // Delete matrix
     for(size_t i = 0; i < atoms; i++)
         delete matrix[i];

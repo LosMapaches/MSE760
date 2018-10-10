@@ -93,12 +93,12 @@ long double **force_energy_lj(
             break;
             }
 
-            distance = sqrt(pow(dx, 2)+pow(dy, 2)+pow(dz, 2));
+            distance = pow(pow(dx, 2.0)+pow(dy, 2.0)+pow(dz, 2.0), 0.5);
 
-            u = 1.0/pow(distance, 12)-1.0/pow(distance, 6);
+            u = 1.0/pow(distance, 12.0)-1.0/pow(distance, 6.0);
             utot +=u;
 
-            a = 1.0/pow(distance, 14)-0.5/pow(distance, 8);
+            a = 1.0/pow(distance, 14.0)-0.5/pow(distance, 8.0);
 
             ax += a*dx;
             ay += a*dy;
@@ -128,6 +128,9 @@ long double **force_energy_lj(
     *energy = utot*4.0;
 
     return acc;
+
+    // Delete pointer
+    delete energy;
 
     // Delete the matrix
     for(size_t i = 0; i < atoms; i++)

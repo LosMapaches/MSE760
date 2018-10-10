@@ -21,7 +21,7 @@ main()
     long double timestep = 0.001e-12;      // Time step [s/step]
     int steps;
 
-    int n = 5;                             // Number of units cells [-]
+    int n = 2;                             // Number of units cells [-]
 
     // Reduced units
     long double ared = reduced_units(m, 1, a);
