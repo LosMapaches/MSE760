@@ -6,9 +6,9 @@ This script creates an fcc lattice in 3D
 void lattice_fcc(
                  int n,
                  long double a,
-                 long double x[],
-                 long double y[],
-                 long double z[]
+                 long double rx[],
+                 long double ry[],
+                 long double rz[]
                  )
 {
     int initialatoms = 4;                  // The number of attoms in one unit cell
@@ -16,16 +16,16 @@ void lattice_fcc(
     const int size = 2*n;                  // The size of the arrays
 
     // First four atoms
-    long double xi[] = {a*0.0, a*0.5, a*0.5, a*0.0};
-    long double yi[] = {a*0.0, a*0.5, a*0.0, a*0.5};
-    long double zi[] = {a*0.0, a*0.0, a*0.5, a*0.5};
+    long double rxi[] = {a*0.0, a*0.5, a*0.5, a*0.0};
+    long double ryi[] = {a*0.0, a*0.5, a*0.0, a*0.5};
+    long double rzi[] = {a*0.0, a*0.0, a*0.5, a*0.5};
 
     // Assign the first four atoms to coordinates
     for(int i = 0; i < initialatoms; i++)
     {
-        x[i] = xi[i];
-        y[i] = yi[i];
-        z[i] = zi[i];
+        rx[i] = rxi[i];
+        ry[i] = ryi[i];
+        rz[i] = rzi[i];
     }
 
     // Repeat along x-axis
@@ -34,9 +34,9 @@ void lattice_fcc(
         for(int j = 0; j < initialatoms; j++)
         {
             int index = (j+i*initialatoms);
-            x[index] = x[j]+a*i;
-            y[index] = y[j];
-            z[index] = z[j];
+            rx[index] = rx[j]+a*i;
+            ry[index] = ry[j];
+            rz[index] = rz[j];
         }
     }
 
@@ -46,9 +46,9 @@ void lattice_fcc(
         for(int j = 0; j < n*initialatoms; j++)
         {
             int index = (j+i*n*initialatoms);
-            x[index] = x[j];
-            y[index] = y[j]+a*i;
-            z[index] = z[j];
+            rx[index] = rx[j];
+            ry[index] = ry[j]+a*i;
+            rz[index] = rz[j];
         }
     }
 
@@ -58,9 +58,9 @@ void lattice_fcc(
         for(int j = 0; j < n*n*initialatoms; j++)
         {
             int index = (j+i*n*n*initialatoms);
-            x[index] = x[j];
-            y[index] = y[j];
-            z[index] = z[j]+a*i;
+            rx[index] = rx[j];
+            ry[index] = ry[j];
+            rz[index] = rz[j]+a*i;
         }
     }
 

@@ -5,30 +5,27 @@ This script unreduces the units of the problem
 #include <math.h>                           // square root
 
 // Return standard units 
-long double unreduced_units(
-                            long double m,
-                            long double epsilon,
-                            long double sigma,
-                            int         choice,
-                            long double ri
-                            )
+void unreduced_units(
+                     long double m,
+                     long double epsilon,
+                     long double sigma,
+                     int         choice,
+                     long double i
+                     )
 {
     long double k = 1.38e-23;              // Boltzmann constant [J/K]
-    long double i;                         // The reduced output
 
     switch(choice)
     {
-        case 1: i = ri*sigma; // Convert distance
+        case 1: i = i*sigma; // Convert distance
             break;
-        case 2: i = ri*epsilon; // Convert energy
+        case 2: i = i*epsilon; // Convert energy
             break;
-        case 3: i = ri*(epsilon/k); // Convert temperature
+        case 3: i = i*(epsilon/k); // Convert temperature
             break;
-        case 4: i = ri*sqrt((m*pow(sigma, 2))/epsilon); // Convert time
+        case 4: i = i*sqrt((m*pow(sigma, 2))/epsilon); // Convert time
             break;
-        case 5: i = ri*(epsilon/sigma); // Convert force
+        case 5: i = i*(epsilon/sigma); // Convert force
             break;
     }
-
-    return i;
 }
