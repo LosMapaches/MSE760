@@ -3,31 +3,31 @@ This scripts calculates the cohesive energy for a
 system with the Lennard-Jones potential.
 Also returns the acceleration coordinates for atoms.
 ----------------------------------------------------*/
+#include <fstream>                         // Use output file
 
 #include <math.h>
 
-// Return the leonard jones energy of the system
-void force_energy_lj(
-                     long double rx[],
-                     long double ry[],
-                     long double rz[],
-                     long double ax[],
-                     long double ay[],
-                     long double az[],
-                     long double energy,
-                     long double l,
-                     int         atoms,
-                     int         periodic
-                     )
+// Return the cohesive energy and accelerations of the system
+long double force_energy_lj(
+                            long double rx[],
+                            long double ry[],
+                            long double rz[],
+                            long double ax[],
+                            long double ay[],
+                            long double az[],
+                            long double l,
+                            int         atoms,
+                            int         periodic
+                            )
 {
+    // Half lengths
+    long double poshalf = l/2.0;
+    long double neghalf = -poshalf;
+
     // The coordinates of the i atom
     long double rxi;
     long double ryi;
     long double rzi;
-
-    // Half lengths
-    long double poshalf = l/2.0;
-    long double neghalf = -poshalf;
 
     // The difference between vectors
     long double drx;
@@ -39,15 +39,14 @@ void force_energy_lj(
 
     // The energy between atoms
     long double u;
-    long double utot;
+    long double utot = 0.0;
 
     // Acceleration
-    long double a;
-    long double incrementax;
-    long double incrementay;
-    long double incrementaz;
+    long double acc;
+    long double incrementax = 0.0;
+    long double incrementay = 0.0;
+    long double incrementaz = 0.0;
 
-    utot = 0.0;
     for(int i = 0; i < atoms - 1; i++)
     {
         rxi = rx[i];
@@ -93,16 +92,16 @@ void force_energy_lj(
             break;
             }
 
-            distance = pow(pow(drx, 2.0)+pow(dry, 2.0)+pow(drz, 2.0), 0.5);
+            distance = sqrt(pow(drx, 2.0)+pow(dry, 2.0)+pow(drz, 2.0));
 
             u = 1.0/pow(distance, 12.0)-1.0/pow(distance, 6.0);
-            utot +=u;
+            utot += u;
 
-            a = 1.0/pow(distance, 14.0)-0.5/pow(distance, 8.0);
+            acc = 1.0/pow(distance, 14.0)-0.5/pow(distance, 8.0);
 
-            incrementax += a*drx;
-            incrementay += a*dry;
-            incrementaz += a*drz;
+            incrementax += acc*drx;
+            incrementay += acc*dry;
+            incrementaz += acc*drz;
 
             ax[i] += incrementax;
             ay[i] += incrementay;
@@ -125,6 +124,5 @@ void force_energy_lj(
     ay[atoms-1] *= 48.0;
     az[atoms-1] *= 48.0;
 
-    energy = utot*4.0;
-
+    return utot*4.0;
 }

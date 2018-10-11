@@ -12,27 +12,19 @@ Homework 2
 
 main()
 {
-    std::ofstream r_coordinates;
-    r_coordinates.open("r_coordinates.txt");  // Position Coordinates
-
-    std::ofstream a_coordinates;
-    a_coordinates.open("a_coordinates.txt");  // Acceleration Coordinates
-
-
-    long double a = 5.7e-10;                  // Lattice constant [m]
+    long double a = 5.256e-10;//5.7e-10;                  // Lattice constant [m]
     long double m = 6.6e-23;                  // Mass [g]
-    long double k = 1.38e-23;                 // Boltzmann constant [J/K]
     long double sigma = 3.4e-10;              // Length [m]
     long double epsilon = 0.0104;             // Energy [eV]
 
-    int n = 5;                                // Number of units cells [-]
+    int n = 20;                                // Number of units cells [-]
+    int atoms = n*n*n*4;                      // Number of atoms
+    long double l = n*a;                      // Side length of box
+
 
     // Reduced units
-    reduced_units(m, epsilon, sigma, 1, a);
-    long double l = n*a;                      // Side length
-
-    // Grab the atom coordinates for FCC structure
-    int atoms = n*n*n*4;                      // Number of atoms
+    long double ared = reduced_units(m, epsilon, sigma, 1, a);
+    long double lred = reduced_units(m, epsilon, sigma, 1, l);
 
     // Coordinates
     long double rx[atoms];
@@ -50,7 +42,12 @@ main()
     long double az[atoms];
 
     // Coordinates for FCC lattice
-    lattice_fcc(n, a, rx, ry, rz);
+    lattice_fcc(n, ared, rx, ry, rz);
+
+    /*
+    // Export the position coordinates
+    std::ofstream r_coordinates;
+    r_coordinates.open("r_coordinates.txt");
 
     r_coordinates << "atom x[m] y[m] z[m]";
     r_coordinates << "\n";
@@ -66,11 +63,42 @@ main()
         r_coordinates << rz[i] << " ";
         r_coordinates << "\n";
 
+        reduced_units(m, epsilon, sigma, 1, rx[i]);
+        reduced_units(m, epsilon, sigma, 1, ry[i]);
+        reduced_units(m, epsilon, sigma, 1, rz[i]);
+
     }
 
+    r_coordinates.close();
+    */
+
     // The acceleration coordinates for each atom
-    long double energy;  // Where energy is stored in reduced units
-    force_energy_lj(rx, ry, rz, ax, ay, az, energy, l, 1, atoms);
+    long double energy_cohesive = force_energy_lj(
+                                                  rx,
+                                                  ry,
+                                                  rz,
+                                                  ax,
+                                                  ay,
+                                                  az,
+                                                  lred,
+                                                  atoms,
+                                                  1
+                                                  );
+
+    // Unreduce energy
+    energy_cohesive = unreduced_units(
+                                      m,
+                                      epsilon,
+                                      sigma,
+                                      2,
+                                      energy_cohesive
+                                      );
+
+    printf("Cohesive Energy: %Lf \n", energy_cohesive/atoms);
+
+    // Export the acceleration coordinates
+    std::ofstream a_coordinates;
+    a_coordinates.open("a_coordinates.txt");
 
     a_coordinates << "atom x[N] y[N] z[N]";
     a_coordinates << "\n";
@@ -88,6 +116,5 @@ main()
 
     }
 
-    r_coordinates.close();
     a_coordinates.close();
 }
