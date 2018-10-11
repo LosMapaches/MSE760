@@ -5,25 +5,28 @@ It is assumed that all atoms have the same velocity magnitude.
 
 #include <cstdlib>                            // Random number generator
 
-long double **velocities(int atoms, long double temperature, long double *tempcheck)
+long double velocities(
+                       long double vx[],
+                       long double vy[],
+                       long double vz[],
+                       int atoms,
+                       long double temperature
+                       )
 {
 
     long double tempper = temperature*(3.0);  // The temperature for each atom
 
-    // Create a matrix for velocites of each atom
-    long double **vel = new long double *[atoms];
-    for(size_t i = 0; i < atoms; i++)
-    {
-        vel[i] = new long double [3];
-    }
+    // A Check on temperature
+    long double temp = 0.0;
+
 
     // Random number on unit sphere
     long double s;
     long double zeta0;
     long double zeta1;
-    long double xi0 [atoms];
-    long double xi1 [atoms];
-    long double xi2 [atoms];
+    long double xi0[atoms];
+    long double xi1[atoms];
+    long double xi2[atoms];
 
     int i = 0;
     while(i < atoms)
@@ -46,33 +49,22 @@ long double **velocities(int atoms, long double temperature, long double *tempch
     long double mag;
 
     // Assign random vector directions to each atom
-    long double temp = 0.0;
     for(int i = 0; i < atoms; i++)
     {
-        vel[i][0] = xi0[i];
-        vel[i][1] = xi1[i];
-        vel[i][2] = xi2[i];
+        vx[i] = xi0[i];
+        vy[i] = xi1[i];
+        vz[i] = xi2[i];
 
-        mag = pow(pow(vel[i][0], 2.0)+pow(vel[i][1], 2.0)+pow(vel[i][2], 2.0), 0.5);
+        mag = pow(pow(vx[i], 2.0)+pow(vy[i], 2.0)+pow(vz[i], 2.0), 0.5);
 
-        for(int j = 0; j < 3; j++)
-            vel[i][j] *= tempper/mag;
+        vx[i] *= tempper/mag;
+        vy[i] *= tempper/mag;
+        vz[i] *= tempper/mag;
 
-        temp += pow(pow(vel[i][0], 2.0)+pow(vel[i][1], 2.0)+pow(vel[i][2], 2.0), 0.5);
+        temp += pow(pow(vx[i], 2.0)+pow(vy[i], 2.0)+pow(vz[i], 2.0), 0.5);
     }
 
     temp /= 3.0*atoms;
 
-    *tempcheck = temp;
-
-    return vel;
-
-    // Delete pointer
-    delete tempcheck;
-
-    // Delete the matrix
-    for(size_t i = 0; i < atoms; i++)
-        delete [] vel[i];
-    delete [] vel;
-
+    return temp;
 }

@@ -6,18 +6,23 @@ Homework 2
 #include <fstream>                         // Use output file
 
 #include "lattice_fcc.cpp"                 // FCC creator
-#include "force_energy_lj.cpp"             // LJ energy and accelerations
+
 #include "reduced_units.cpp"               // Reduce units
-#include "unreduced_units.cpp"             // Unreduce units
+#include "unreduced_units.cpp"             // Unreduce unitsi
+
+#include "force_energy_lj.cpp"             // LJ energy and accelerations
+#include "velocities.cpp"
 
 main()
 {
-    long double a = 5.256e-10;//5.7e-10;                  // Lattice constant [m]
+    long double a = 5.7e-10;                  // Lattice constant [m]
     long double m = 6.6e-23;                  // Mass [g]
     long double sigma = 3.4e-10;              // Length [m]
     long double epsilon = 0.0104;             // Energy [eV]
 
-    int n = 20;                                // Number of units cells [-]
+    long double T = 300.0;                    // Temperature [K]
+
+    int n = 5;                                // Number of units cells [-]
     int atoms = n*n*n*4;                      // Number of atoms
     long double l = n*a;                      // Side length of box
 
@@ -25,6 +30,7 @@ main()
     // Reduced units
     long double ared = reduced_units(m, epsilon, sigma, 1, a);
     long double lred = reduced_units(m, epsilon, sigma, 1, l);
+    long double Tred = reduced_units(m, epsilon, sigma, 3, T);
 
     // Coordinates
     long double rx[atoms];
@@ -44,7 +50,6 @@ main()
     // Coordinates for FCC lattice
     lattice_fcc(n, ared, rx, ry, rz);
 
-    /*
     // Export the position coordinates
     std::ofstream r_coordinates;
     r_coordinates.open("r_coordinates.txt");
@@ -53,24 +58,14 @@ main()
     r_coordinates << "\n";
     for(int i = 0; i < atoms; i++)
     {
-        unreduced_units(m, epsilon, sigma, 1, rx[i]);
-        unreduced_units(m, epsilon, sigma, 1, ry[i]);
-        unreduced_units(m, epsilon, sigma, 1, rz[i]);
-
         r_coordinates << i << " ";
-        r_coordinates << rx[i] << " ";
-        r_coordinates << ry[i] << " ";
-        r_coordinates << rz[i] << " ";
+        r_coordinates << unreduced_units(m, epsilon, sigma, 1, rx[i]) << " ";
+        r_coordinates << unreduced_units(m, epsilon, sigma, 1, ry[i]) << " ";
+        r_coordinates << unreduced_units(m, epsilon, sigma, 1, rz[i]) << " ";
         r_coordinates << "\n";
-
-        reduced_units(m, epsilon, sigma, 1, rx[i]);
-        reduced_units(m, epsilon, sigma, 1, ry[i]);
-        reduced_units(m, epsilon, sigma, 1, rz[i]);
-
     }
 
     r_coordinates.close();
-    */
 
     // The acceleration coordinates for each atom
     long double energy_cohesive = force_energy_lj(
@@ -104,17 +99,15 @@ main()
     a_coordinates << "\n";
     for(int i = 0; i < atoms; i++)
     {
-        unreduced_units(m, epsilon, sigma, 5, ax[i]);
-        unreduced_units(m, epsilon, sigma, 5, ay[i]);
-        unreduced_units(m, epsilon, sigma, 5, az[i]);
-
         a_coordinates << i << " ";
-        a_coordinates << ax[i]*1.602e-19 << " ";
-        a_coordinates << ay[i]*1.602e-19 << " ";
-        a_coordinates << az[i]*1.602e-19 << " ";
+        a_coordinates << unreduced_units(m, epsilon, sigma, 5, ax[i])*1.602e-19 << " ";
+        a_coordinates << unreduced_units(m, epsilon, sigma, 5, ay[i])*1.602e-19 << " ";
+        a_coordinates << unreduced_units(m, epsilon, sigma, 5, az[i])*1.602e-19 << " ";
         a_coordinates << "\n";
-
     }
 
     a_coordinates.close();
+
+    long double tempcheck = velocities(vx, vy, vz, atoms, Tred);
+    printf("Temperature: %Lf \n", unreduced_units(m, epsilon, sigma, 3, tempcheck));
 }

@@ -3,7 +3,6 @@ This scripts calculates the cohesive energy for a
 system with the Lennard-Jones potential.
 Also returns the acceleration coordinates for atoms.
 ----------------------------------------------------*/
-#include <fstream>                         // Use output file
 
 #include <math.h>
 
