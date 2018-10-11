@@ -12,25 +12,43 @@ Homework 2
 
 main()
 {
-    std::ofstream coordinates;
-    coordinates.open("coordinates.txt");   // Cohesive energy vs size
+    std::ofstream r_coordinates;
+    r_coordinates.open("r_coordinates.txt");  // Cohesive energy vs size
 
-    long double a = 5.7e-10;               // Lattice constant [m]
-    long double m = 6.6e-23;               // Mass [g]
+    long double a = 5.7e-10;                  // Lattice constant [m]
+    long double m = 6.6e-23;                  // Mass [g]
+    long double k = 1.38e-23;              // Boltzmann constant [J/K]
+    long double sigma = 3.4e-10;           // Length [m]
+    long double epsilon = 0.0104;          // Energy [eV]
 
-    int n = 5;                             // Number of units cells [-]
+    int n = 5;                                // Number of units cells [-]
 
     // Reduced units
-    long double ared = reduced_units(m, 1, a);
-    long double l = n*ared;                // Side length
+    a = reduced_units(m, epsilon, sigma, 1, a);
+    long double l = n*a;                   // Side length
 
     // Grab the atom coordinates for FCC structure
-    int dimensions;                        // Dimension of problem
-    int atoms;                             // Number of atoms
+    int atoms = n*n*n*4;                      // Number of atoms
 
     // Coordinates for FCC lattice
-    long double **array = lattice_fcc(n, ared, &atoms, &dimensions);
+    long double x[atoms];
+    long double y[atoms];
+    long double z[atoms];
+    lattice_fcc(n, a, x, y, z);
 
+    r_coordinates << "atom x[N] y[N] z[N]";
+    r_coordinates << "\n";
+    for(int i = 0; i < atoms; i++)
+    {
+        r_coordinates << i << " ";
+        r_coordinates << unreduced_units(m, epsilon, sigma, 1, x[i]) << " ";
+        r_coordinates << unreduced_units(m, epsilon, sigma, 1, y[i]) << " ";
+        r_coordinates << unreduced_units(m, epsilon, sigma, 1, z[i]) << " ";
+        r_coordinates << "\n";
+
+    }
+
+    /*
     // The acceleration coordinates for each atom
     long double energy;  // Where energy is stored in reduced units
     long double **acc = force_energy_lj(array, l, 1, atoms, &energy);
@@ -46,6 +64,7 @@ main()
         coordinates << "\n";
 
     }
+    */
 
-    coordinates.close();
+    r_coordinates.close();
 }

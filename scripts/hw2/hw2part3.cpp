@@ -29,16 +29,9 @@ main()
     long double Tred = reduced_units(m, 3, T);
     long double l = n*ared;                // Side length
 
-    // Grab the atom coordinates for FCC structure
-    int dimensions;                        // Dimension of problem
-    int atoms;                             // Number of atoms
-
-    // Coordinates for FCC lattice
-    long double **array = lattice_fcc(n, ared, &atoms, &dimensions);
-
     // Run for 2.2e-11 seconds
     steps = 22000;  // The number of run steps when dt = 0.001 [ps]
-    long double **r = simulate(atoms, steps, l, Tred, timestepred, array);
+    long double **r = simulate(n, ared, l, Tred, timestepred, steps);
 
     steps = 4400;  // The number of run steps when dt = 0.005 [ps]
     steps = 1100;  // The number of run steps when dt = 0.02 [ps]

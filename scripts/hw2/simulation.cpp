@@ -4,23 +4,28 @@ Simulate position, velocity, and acceleration updates for a time.
 #include <stdio.h>
 
 long double **simulate(
-                       int atoms,
-                       int steps,
+                       int n,
+                       long double ac,
                        long double l,
                        long double Ti,
                        long double timestep,
-                       long double **r
+                       int steps
                        )
 {
+    // Parameters
+    int atoms;
+    int dimensions;
+
     // The energies for each step calulated
     long double energy0;
     long double cohesive[steps];
-    long double kinetic[atoms];
-    long double potential[atoms];
-    long double total[atoms];
+    long double kinetic[steps];
+    long double potential[steps];
+    long double total[steps];
 
     // Initial values
     long double checktemp;
+    long double **r = lattice_fcc(n, ac, &atoms, &dimensions);
     long double **v = velocities(atoms, Ti, &checktemp);
     long double **a = force_energy_lj(r, l, 1, atoms, &energy0);
     cohesive[0] = energy0;

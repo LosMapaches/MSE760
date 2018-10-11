@@ -134,7 +134,7 @@ long double **force_energy_lj(
 
     // Delete the matrix
     for(size_t i = 0; i < atoms; i++)
-        delete acc[i];
-    delete acc;
+        delete [] acc[i];
+    delete [] acc;
 
 }

@@ -7,15 +7,13 @@ This script unreduces the units of the problem
 // Return standard units 
 long double unreduced_units(
                             long double m,
+                            long double epsilon,
+                            long double sigma,
                             int         choice,
-                            long double ri 
+                            long double ri
                             )
 {
-    /* Constants for conversion */
     long double k = 1.38e-23;              // Boltzmann constant [J/K]
-    long double sigma = 3.4e-10;           // Length [m]
-    long double epsilon = 0.0104;          // Energy [eV]
-
     long double i;                         // The reduced output
 
     switch(choice)
