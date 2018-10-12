@@ -3,7 +3,10 @@ Simulate position, velocity, and acceleration updates for a time.
 ----------------------------------------------------------------------------*/
 
 void simulate(
-              int atoms,
+              int         atoms,
+              int         n,
+              long double a,
+              long double T,
               long double rx[],
               long double ry[],
               long double rz[],
@@ -15,20 +18,34 @@ void simulate(
               long double az[],
               long double l,
               long double dt,
-              int steps
+              int         steps
               )
 {
+
+    // Coordinates for FCC lattice
+    lattice_fcc(n, a, rx, ry, rz);
+
+    // Velocity coordinates
+    long double tempcheck = velocities(vx, vy, vz, atoms, T);
+
+    // The acceleration coordinates for each atom
+    long double energy_cohesive = force_energy_lj(
+                                                  rx,
+                                                  ry,
+                                                  rz,
+                                                  ax,
+                                                  ay,
+                                                  az,
+                                                  l,
+                                                  atoms,
+                                                  1
+                                                  );
+
     // Half timestep
     long double halfdt = dt/2.0;
 
     // The energies for each step calulated
     long double cohesive[steps];
-    long double kinetic[steps];
-    long double potential[steps];
-    long double total[steps];
-
-    // Temperatures
-    long double temp[steps];
 
     for(int step = 1; step <= steps; step++)
     {
