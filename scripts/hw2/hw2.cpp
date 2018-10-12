@@ -5,13 +5,15 @@ Homework 2
 
 #include <fstream>                         // Use output file
 
-#include "lattice_fcc.cpp"                 // FCC creator
+#include "lattice_fcc.cpp"                 // FCC coordinates
 
 #include "reduced_units.cpp"               // Reduce units
 #include "unreduced_units.cpp"             // Unreduce unitsi
 
 #include "force_energy_lj.cpp"             // LJ energy and accelerations
-#include "velocities.cpp"
+#include "velocities.cpp"                  // Randomize velocities
+
+#include "simulation.cpp"                  // Start molecular dynamics
 
 main()
 {
@@ -26,11 +28,14 @@ main()
     int atoms = n*n*n*4;                      // Number of atoms
     long double l = n*a;                      // Side length of box
 
+    long double t = 0.001e-12;                // Time step [s/step]
+    int steps;                                // The number of steps
 
     // Reduced units
     long double ared = reduced_units(m, epsilon, sigma, 1, a);
     long double lred = reduced_units(m, epsilon, sigma, 1, l);
     long double Tred = reduced_units(m, epsilon, sigma, 3, T);
+    long double tred = reduced_units(m, epsilon, sigma, 4, t);
 
     // Coordinates
     long double rx[atoms];
@@ -110,4 +115,10 @@ main()
 
     long double tempcheck = velocities(vx, vy, vz, atoms, Tred);
     printf("Temperature: %Lf \n", unreduced_units(m, epsilon, sigma, 3, tempcheck));
+
+    steps = 22000;  // dt = 0.001
+    simulate(atoms, rx, ry, rz, vx, vy, vz, ax, ay, az, lred, tred, tred);
+
+    steps = 4400;   // dt = 0.005
+    steps = 1100;   // dt = 0.02
 }
