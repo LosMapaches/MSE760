@@ -55,7 +55,7 @@ main()
 
     // Export the position coordinates
     std::ofstream r_coordinates;
-    r_coordinates.open("r_coordinates.txt");
+    r_coordinates.open("./coordinates/r_coordinates");
 
     r_coordinates << "atom x[m] y[m] z[m]";
     r_coordinates << "\n";
@@ -93,11 +93,11 @@ main()
                                cohesive
                                );
 
-    printf("Cohesive Energy: %Lf \n", cohesive);
+    printf("Cohesive Energy: %Lf [eV]\n", cohesive);
 
     // Export the acceleration coordinates
     std::ofstream a_coordinates;
-    a_coordinates.open("a_coordinates.txt");
+    a_coordinates.open("./coordinates/a_coordinates");
 
     a_coordinates << "atom x[N] y[N] z[N]";
     a_coordinates << "\n";
@@ -114,5 +114,5 @@ main()
 
     velocities(vx, vy, vz, atoms, Tred);
     long double tempcheck = temperature(atoms, vx, vy, vz);
-    printf("Temperature: %Lf \n", unreduced_units(m, epsilon, sigma, 3, tempcheck));
+    printf("Temperature: %Lf [K]\n", unreduced_units(m, epsilon, sigma, 3, tempcheck));
 }

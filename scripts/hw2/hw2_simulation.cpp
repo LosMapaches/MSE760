@@ -22,6 +22,7 @@ main()
     long double m = 6.6e-23;               // Mass [g]
     long double sigma = 3.4e-10;           // Length [m]
     long double epsilon = 0.0104;          // Energy [eV]
+    long double k = 1.38e-23;              // Boltzmann constant [J/K]
 
     long double T = 300.0;                 // Temperature [K]
 
@@ -83,9 +84,9 @@ main()
 
     // Export the energies of the system with respect to time
     std::ofstream energies;
-    energies.open("energies1");
+    energies.open("./energies/energies1");
 
-    energies << "time[s] cohesive[eV] kinetic[eV] total[eV]";
+    energies << "time[s] cohesive[eV/atom] kinetic[eV/atom] total[eV/atom]";
     energies << "\n";
 
     long double time;
@@ -95,9 +96,12 @@ main()
         energies << time << " ";
 
         cohesive[i] = unreduced_units(m, epsilon, sigma, 2, cohesive[i]);
+        cohesive[i] /= atoms;
         energies << cohesive[i] << " ";
 
-        kinetic[i] = unreduced_units(m, epsilon, sigma, 2, kinetic[i]);
+        kinetic[i] = unreduced_units(m, epsilon, sigma, 3, kinetic[i]);
+        kinetic[i] *= 3.0/2.0*atoms*k;
+        kinetic[i] /= atoms;
         energies << kinetic[i] << " ";
 
         energies << cohesive[i]+kinetic[i] << "\n";

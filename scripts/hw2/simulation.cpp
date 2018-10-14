@@ -49,8 +49,11 @@ void simulate(
 
     cohesive[0] = pe;
 
-    // Half timestep
+    // Half values
     long double halfdt = dt/2.0;
+    long double halfvx = 0.0;
+    long double halfvy = 0.0;
+    long double halfvz = 0.0;
 
     for(int step = 1; step <= steps; step++)
     {
@@ -58,13 +61,13 @@ void simulate(
 
         for(int i = 0; i < atoms; i++)
         {
-            vx[i] += ax[i]*halfdt;
-            vy[i] += ay[i]*halfdt;
-            vz[i] += az[i]*halfdt;
+            halfvx = vx[i]+ax[i]*halfdt;
+            halfvy = vy[i]+ay[i]*halfdt;
+            halfvz = vz[i]+az[i]*halfdt;
 
-            rx[i] += vx[i]*dt;
-            ry[i] += vy[i]*dt;
-            rz[i] += vz[i]*dt;
+            rx[i] += halfvx*dt;
+            ry[i] += halfvy*dt;
+            rz[i] += halfvz*dt;
         }
 
         // The kinetic energy
