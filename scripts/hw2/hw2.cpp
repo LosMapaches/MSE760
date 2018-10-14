@@ -12,6 +12,7 @@ Homework 2
 
 #include "force_energy_lj.cpp"             // LJ energy and accelerations
 #include "velocities.cpp"                  // Randomize velocities
+#include "temperature.cpp"                 // Calculate temperatures
 
 main()
 {
@@ -115,6 +116,7 @@ main()
 
     a_coordinates.close();
 
-    long double tempcheck = velocities(vx, vy, vz, atoms, Tred);
+    velocities(vx, vy, vz, atoms, Tred);
+    long double tempcheck = temperature(atoms, vx, vy, vz);
     printf("Temperature: %Lf \n", unreduced_units(m, epsilon, sigma, 3, tempcheck));
 }
