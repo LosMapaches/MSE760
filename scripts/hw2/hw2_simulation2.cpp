@@ -30,8 +30,18 @@ main()
     int atoms = n*n*n*4;                   // Number of atoms
     long double l = n*a;                   // Side length of box
 
+    /*
     long double t = 0.001e-12;             // Time step [s/step]
     int steps = 22000;                     // The number of steps dt = 0.001 [ps]
+    */
+
+    long double t = 0.005e-12;             // Time step [s/step]
+    int steps = 4400;                      // The number of steps dt = 0.001 [ps]
+
+    /*
+    long double t = 0.02e-12;              // Time step [s/step]
+    int steps = 1100;                      // The number of steps dt = 0.001 [ps]
+    */
 
     // Reduced units
     long double ared = reduced_units(m, epsilon, sigma, 1, a);
@@ -84,7 +94,7 @@ main()
 
     // Export the energies of the system with respect to time
     std::ofstream energies;
-    energies.open("./energies/energies1");
+    energies.open("./energies/energies0p005");
 
     energies << "time[s] cohesive[eV/atom] kinetic[eV/atom] total[eV/atom]";
     energies << "\n";
