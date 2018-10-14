@@ -5,13 +5,13 @@ It is assumed that all atoms have the same velocity magnitude.
 
 #include <cstdlib>                            // Random number generator
 
-long double velocities(
-                       long double vx[],
-                       long double vy[],
-                       long double vz[],
-                       int atoms,
-                       long double temperature
-                       )
+void velocities(
+                long double vx[],
+                long double vy[],
+                long double vz[],
+                int atoms,
+                long double temperature
+                )
 {
     long double tempper = temperature*(3.0);  // The temperature for each atom
 

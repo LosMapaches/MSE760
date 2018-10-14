@@ -23,12 +23,15 @@ void simulate(
               int         steps
               )
 {
+    // Energies
+    long double pe;
 
     // Coordinates for FCC lattice
     lattice_fcc(n, a, rx, ry, rz);
 
     // Velocity coordinates
-    long double tempcheck = velocities(vx, vy, vz, atoms, T);
+    velocities(vx, vy, vz, atoms, T);
+    kinetic[0] = temperature(atoms, vx, vy, vz);
 
     // The acceleration coordinates for each atom
     force_energy_lj(
@@ -41,8 +44,10 @@ void simulate(
                     l,
                     atoms,
                     1,
-                    cohesive[0]
+                    pe
                     );
+
+    cohesive[0] = pe;
 
     // Half timestep
     long double halfdt = dt/2.0;
@@ -61,6 +66,10 @@ void simulate(
             ry[i] += vy[i]*dt;
             rz[i] += vz[i]*dt;
         }
+
+        // The kinetic energy
+        kinetic[step] = temperature(atoms, vx, vy, vz);
+
         // The acceleration coordinates for each atom
         force_energy_lj(
                         rx,
@@ -72,7 +81,9 @@ void simulate(
                         l,
                         atoms,
                         1,
-                        cohesive[step]
+                        pe
                         );
+
+        cohesive[step] = pe;
     }
 }

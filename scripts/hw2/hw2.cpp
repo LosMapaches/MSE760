@@ -27,14 +27,10 @@ main()
     int atoms = n*n*n*4;                      // Number of atoms
     long double l = n*a;                      // Side length of box
 
-    long double t = 0.001e-12;                // Time step [s/step]
-    int steps = 22000;                        // The number of steps
-
     // Reduced units
     long double ared = reduced_units(m, epsilon, sigma, 1, a);
     long double lred = reduced_units(m, epsilon, sigma, 1, l);
     long double Tred = reduced_units(m, epsilon, sigma, 3, T);
-    long double tred = reduced_units(m, epsilon, sigma, 4, t);
 
     // Coordinates
     long double rx[atoms];
