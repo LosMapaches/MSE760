@@ -50,6 +50,9 @@ main()
     long double ay[atoms];
     long double az[atoms];
 
+    // Energy
+    long double cohesive = 0.0;
+
     // Coordinates for FCC lattice
     lattice_fcc(n, ared, rx, ry, rz);
 
@@ -71,28 +74,29 @@ main()
     r_coordinates.close();
 
     // The acceleration coordinates for each atom
-    long double energy_cohesive = force_energy_lj(
-                                                  rx,
-                                                  ry,
-                                                  rz,
-                                                  ax,
-                                                  ay,
-                                                  az,
-                                                  lred,
-                                                  atoms,
-                                                  1
-                                                  );
+    force_energy_lj(
+                    rx,
+                    ry,
+                    rz,
+                    ax,
+                    ay,
+                    az,
+                    lred,
+                    atoms,
+                    1,
+                    cohesive
+                    );
 
     // Unreduce energy
-    energy_cohesive = unreduced_units(
-                                      m,
-                                      epsilon,
-                                      sigma,
-                                      2,
-                                      energy_cohesive
-                                      );
+    cohesive = unreduced_units(
+                               m,
+                               epsilon,
+                               sigma,
+                               2,
+                               cohesive
+                               );
 
-    printf("Cohesive Energy: %Lf \n", energy_cohesive/atoms);
+    printf("Cohesive Energy: %Lf \n", cohesive);
 
     // Export the acceleration coordinates
     std::ofstream a_coordinates;

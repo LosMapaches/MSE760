@@ -7,6 +7,8 @@ void simulate(
               int         n,
               long double a,
               long double T,
+              long double cohesive[],
+              long double kinetic[],
               long double rx[],
               long double ry[],
               long double rz[],
@@ -29,23 +31,21 @@ void simulate(
     long double tempcheck = velocities(vx, vy, vz, atoms, T);
 
     // The acceleration coordinates for each atom
-    long double energy_cohesive = force_energy_lj(
-                                                  rx,
-                                                  ry,
-                                                  rz,
-                                                  ax,
-                                                  ay,
-                                                  az,
-                                                  l,
-                                                  atoms,
-                                                  1
-                                                  );
+    force_energy_lj(
+                    rx,
+                    ry,
+                    rz,
+                    ax,
+                    ay,
+                    az,
+                    l,
+                    atoms,
+                    1,
+                    cohesive[0]
+                    );
 
     // Half timestep
     long double halfdt = dt/2.0;
-
-    // The energies for each step calulated
-    long double cohesive[steps];
 
     for(int step = 1; step <= steps; step++)
     {
@@ -62,17 +62,17 @@ void simulate(
             rz[i] += vz[i]*dt;
         }
         // The acceleration coordinates for each atom
-        long double energy_cohesive = force_energy_lj(
-                                                      rx,
-                                                      ry,
-                                                      rz,
-                                                      ax,
-                                                      ay,
-                                                      az,
-                                                      l,
-                                                      atoms,
-                                                      1
-                                                      );
-
+        force_energy_lj(
+                        rx,
+                        ry,
+                        rz,
+                        ax,
+                        ay,
+                        az,
+                        l,
+                        atoms,
+                        1,
+                        cohesive[step]
+                        );
     }
 }

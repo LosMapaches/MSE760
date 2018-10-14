@@ -7,17 +7,18 @@ Also returns the acceleration coordinates for atoms.
 #include <math.h>
 
 // Return the cohesive energy and accelerations of the system
-long double force_energy_lj(
-                            long double rx[],
-                            long double ry[],
-                            long double rz[],
-                            long double ax[],
-                            long double ay[],
-                            long double az[],
-                            long double l,
-                            int         atoms,
-                            int         periodic
-                            )
+void force_energy_lj(
+                     long double rx[],
+                     long double ry[],
+                     long double rz[],
+                     long double ax[],
+                     long double ay[],
+                     long double az[],
+                     long double l,
+                     int         atoms,
+                     int         periodic,
+                     long double &cohesive
+                     )
 {
     // Half lengths
     long double poshalf = l/2.0;
@@ -38,7 +39,6 @@ long double force_energy_lj(
 
     // The energy between atoms
     long double u;
-    long double utot = 0.0;
 
     // Acceleration
     long double acc;
@@ -94,7 +94,7 @@ long double force_energy_lj(
             distance = sqrt(pow(drx, 2.0)+pow(dry, 2.0)+pow(drz, 2.0));
 
             u = 1.0/pow(distance, 12.0)-1.0/pow(distance, 6.0);
-            utot += u;
+            cohesive += u;
 
             acc = 1.0/pow(distance, 14.0)-0.5/pow(distance, 8.0);
 
@@ -118,10 +118,10 @@ long double force_energy_lj(
 
     }
 
+    cohesive *= 4.0/atoms;
+
     // The last atom multiplication
     ax[atoms-1] *= 48.0;
     ay[atoms-1] *= 48.0;
     az[atoms-1] *= 48.0;
-
-    return utot*4.0;
 }

@@ -29,7 +29,7 @@ main()
     long double l = n*a;                      // Side length of box
 
     long double t = 0.001e-12;                // Time step [s/step]
-    int steps = 22000;                        // The number of steps
+    int steps = 22000;                        // The number of steps dt = 0.001 [ps]
 
     // Reduced units
     long double ared = reduced_units(m, epsilon, sigma, 1, a);
@@ -58,12 +58,30 @@ main()
     // The energies for each step calulated
     long double cohesive[steps];
     long double kinetic[steps];
-    long double potential[steps];
     long double total[steps];
 
     // Temperatures
     long double temp[steps];
-    simulate(atoms, n, ared, Tred, rx, ry, rz, vx, vy, vz, ax, ay, az, lred, tred, tred);
+    simulate(
+             atoms,
+             n,
+             ared,
+             Tred,
+             cohesive,
+             kinetic,
+             rx,
+             ry,
+             rz,
+             vx,
+             vy,
+             vz,
+             ax,
+             ay,
+             az,
+             lred,
+             tred,
+             steps
+             );
 
     steps = 4400;   // dt = 0.005
     steps = 1100;   // dt = 0.02

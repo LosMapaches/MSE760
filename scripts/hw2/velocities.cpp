@@ -13,7 +13,7 @@ long double velocities(
                        long double temperature
                        )
 {
-
+    long double k = 1.38e-23;              // Boltzmann constant [J/K]
     long double tempper = temperature*(3.0);  // The temperature for each atom
 
     // A Check on temperature
@@ -64,7 +64,7 @@ long double velocities(
         temp += pow(pow(vx[i], 2.0)+pow(vy[i], 2.0)+pow(vz[i], 2.0), 0.5);
     }
 
-    temp /= 3.0*atoms;
+    temp /= 3.0*atoms;  // The temperature
 
     return temp;
 }
