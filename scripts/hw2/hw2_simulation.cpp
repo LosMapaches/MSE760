@@ -31,23 +31,22 @@ main()
     long double l = n*a;                   // Side length of box
 
     /*
-    long double t = 0.001e-12;             // Time step [s/step]
-    int steps = 22000;                     // The number of steps dt = 0.001 [ps]
+    long double t = 0.001;                 // Time step [s/step]
+    int steps = 10000;                     // The number of steps
+
+    long double t = 0.005;                 // Time step [s/step]
+    int steps = 2000;                      // The number of steps
     */
 
-    long double t = 0.005e-12;             // Time step [s/step]
-    int steps = 4400;                      // The number of steps dt = 0.001 [ps]
+    long double tred = 0.02;               // Time step [s/step]
+    long double t = unreduced_units(m, epsilon, sigma, 4, tred);
 
-    /*
-    long double t = 0.02e-12;              // Time step [s/step]
-    int steps = 1100;                      // The number of steps dt = 0.001 [ps]
-    */
+    int steps = 500;                       // The number of steps
 
     // Reduced units
     long double ared = reduced_units(m, epsilon, sigma, 1, a);
     long double lred = reduced_units(m, epsilon, sigma, 1, l);
     long double Tred = reduced_units(m, epsilon, sigma, 3, T);
-    long double tred = reduced_units(m, epsilon, sigma, 4, t);
 
     // Coordinates
     long double rx[atoms];
@@ -69,8 +68,6 @@ main()
     long double kinetic[steps];
     long double total[steps];
 
-    // Temperatures
-    long double temp[steps];
     simulate(
              atoms,
              n,
@@ -94,7 +91,7 @@ main()
 
     // Export the energies of the system with respect to time
     std::ofstream energies;
-    energies.open("./energies/energies0p005");
+    energies.open("./energies/energies0p02");
 
     energies << "time[s] cohesive[eV/atom] kinetic[eV/atom] total[eV/atom]";
     energies << "\n";
