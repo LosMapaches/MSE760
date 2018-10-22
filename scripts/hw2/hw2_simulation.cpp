@@ -22,7 +22,7 @@ main()
     long double m = 6.6e-26;               // Mass [kg]
     long double sigma = 3.4e-10;           // Length [m]
     long double epsilon = 0.0104;          // Energy [eV]
-    long double k = 1.38e-23;              // Boltzmann constant [J/K]
+    long double k = 8.6173303e-5;          // Boltzmann constant [eV/K]
 
     long double T = 300.0;                 // Temperature [K]
 

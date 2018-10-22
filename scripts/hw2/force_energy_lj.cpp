@@ -41,6 +41,14 @@ void force_energy_lj(
     long double incrementay;
     long double incrementaz;
 
+    // Clear acceleration values
+    for(int i = 0; i < atoms; i++)
+    {
+        ax[i] = 0.0;
+        ay[i] = 0.0;
+        az[i] = 0.0;
+    }
+
     for(int i = 0; i < atoms - 1; i++)
     {
         for(int j = i + 1; j < atoms; j++)
@@ -85,8 +93,7 @@ void force_energy_lj(
             u = 1.0/pow(distance, 12.0)-1.0/pow(distance, 6.0);
             cohesive += u;
 
-            acc = 1.0/pow(distance, 14.0)-0.5/pow(distance, 8.0);
-            acc *= 48.0;
+            acc = 48.0*(1.0/pow(distance, 14.0)-0.5/pow(distance, 8.0));
 
             // Limit the number of computations
             incrementax = acc*drx;

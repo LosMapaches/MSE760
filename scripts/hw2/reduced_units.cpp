@@ -13,7 +13,7 @@ long double reduced_units(
                           long double i
                           )
 {
-    long double k = 1.38e-23;              // Boltzmann constant [J/K]
+    long double k = 8.6173303e-5;           // Boltzmann constant [eV/K]
 
     switch(choice)
     {
