@@ -31,14 +31,20 @@ main()
     long double l = n*a;                   // Side length of box
 
     /*
-    long double t = 0.001;                 // Time step [s/step]
-    int steps = 10000;                     // The number of steps
+    long double tred = 0.001;              // Time step
+    long double t = unreduced_units(m, epsilon, sigma, 4, tred);
 
-    long double t = 0.005;                 // Time step [s/step]
+    int steps = 10000;                     // The number of steps
+    */
+
+    /*
+    long double tred = 0.005;              // Time step
+    long double t = unreduced_units(m, epsilon, sigma, 4, tred);
+
     int steps = 2000;                      // The number of steps
     */
 
-    long double tred = 0.02;               // Time step [s/step]
+    long double tred = 0.02;               // Time step
     long double t = unreduced_units(m, epsilon, sigma, 4, tred);
 
     int steps = 500;                       // The number of steps

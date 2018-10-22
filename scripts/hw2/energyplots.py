@@ -26,17 +26,19 @@ for item in files:
             data[name]['kinetic'].append(values[2])
             data[name]['total'].append(values[3])
 
-skip = 20 # The skip to ignore settling data
+skip = 0 # The skip to ignore settling data
+end = None
 for key in data:
-    pl.plot(data[key]['time'][skip:], data[key]['cohesive'][skip:], label='Potential')
-    pl.plot(data[key]['time'][skip:], data[key]['kinetic'][skip:], label='Kinetic')
-    pl.plot(data[key]['time'][skip:], data[key]['total'][skip:], label='Total')
+    pl.plot(data[key]['time'][skip:end], data[key]['cohesive'][skip:end], label='Potential')
+    pl.plot(data[key]['time'][skip:end], data[key]['kinetic'][skip:end], label='Kinetic')
+    pl.plot(data[key]['time'][skip:end], data[key]['total'][skip:end], label='Total')
 
     pl.xlabel('Time [s]')
     pl.ylabel('Energy [eV/atom]')
     pl.legend(loc='best')
     pl.grid()
     pl.savefig('./figures/'+key+'single')
+    pl.show()
     pl.clf()
 
 for key in data:

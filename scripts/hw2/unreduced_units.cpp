@@ -5,7 +5,7 @@ This script unreduces the units of the problem
 #include <math.h>                           // square root
 
 // Return standard units 
-double long unreduced_units(
+long double unreduced_units(
                             long double m,
                             long double epsilon,
                             long double sigma,

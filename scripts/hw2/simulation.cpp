@@ -51,9 +51,9 @@ void simulate(
 
     // Half values
     long double halfdt = dt/2.0;
-    long double halfvx = 0.0;
-    long double halfvy = 0.0;
-    long double halfvz = 0.0;
+    long double halfvx[atoms];
+    long double halfvy[atoms];
+    long double halfvz[atoms];
 
     for(int step = 1; step <= steps; step++)
     {
@@ -61,17 +61,14 @@ void simulate(
 
         for(int i = 0; i < atoms; i++)
         {
-            halfvx = vx[i]+ax[i]*halfdt;
-            halfvy = vy[i]+ay[i]*halfdt;
-            halfvz = vz[i]+az[i]*halfdt;
+            halfvx[i] = vx[i]+ax[i]*halfdt;
+            halfvy[i] = vy[i]+ay[i]*halfdt;
+            halfvz[i] = vz[i]+az[i]*halfdt;
 
-            rx[i] += halfvx*dt;
-            ry[i] += halfvy*dt;
-            rz[i] += halfvz*dt;
+            rx[i] += halfvx[i]*dt;
+            ry[i] += halfvy[i]*dt;
+            rz[i] += halfvz[i]*dt;
         }
-
-        // The kinetic energy
-        kinetic[step] = temperature(atoms, vx, vy, vz);
 
         // The acceleration coordinates for each atom
         force_energy_lj(
@@ -88,5 +85,15 @@ void simulate(
                         );
 
         cohesive[step] = pe;
+
+        for(int i = 0; i < atoms; i++)
+        {
+            vx[i] = halfvx[i]+halfdt*ax[i];
+            vy[i] = halfvy[i]+halfdt*ay[i];
+            vz[i] = halfvz[i]+halfdt*az[i];
+        }
+
+        // The kinetic energy
+        kinetic[step] = temperature(atoms, vx, vy, vz);
     }
 }

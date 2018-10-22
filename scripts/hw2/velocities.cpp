@@ -13,7 +13,7 @@ void velocities(
                 long double temperature
                 )
 {
-    long double tempper = temperature*(3.0);  // The temperature for each atom
+    long double tempper = temperature*3.0;  // The temperature for each atom
 
     // Random number on unit sphere
     long double s;
