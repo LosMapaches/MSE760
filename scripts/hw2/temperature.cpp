@@ -18,7 +18,7 @@ long double temperature(
 
     for(int i = 0; i < atoms; i++)
     {
-        temp += sqrt(pow(vx[i], 2.0)+pow(vy[i], 2.0)+pow(vz[i], 2.0));        
+        temp += pow(vx[i], 2.0)+pow(vy[i], 2.0)+pow(vz[i], 2.0);        
     }
 
     temp /= 3.0*atoms;  // The temperature

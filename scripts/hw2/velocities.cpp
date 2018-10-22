@@ -13,7 +13,7 @@ void velocities(
                 long double temperature
                 )
 {
-    long double tempper = temperature*3.0;  // The temperature for each atom
+    long double tempper = sqrt(temperature*3.0);  // The temperature for each atom
 
     // Random number on unit sphere
     long double s2;
@@ -22,6 +22,7 @@ void velocities(
 
     // The maginitude for calulating a unit vector
     long double mag;
+    long double division;
 
     int i = 0;
     while(i < atoms)
@@ -35,11 +36,12 @@ void velocities(
             vy[i] = 2*pow(1-s2, 0.5)*zeta1;
             vz[i] = 1-2*s2;
 
-            mag = pow(pow(vx[i], 2.0)+pow(vy[i], 2.0)+pow(vz[i], 2.0), 0.5);
+            mag = sqrt(pow(vx[i], 2.0)+pow(vy[i], 2.0)+pow(vz[i], 2.0));
 
-            vx[i] *= tempper/mag;
-            vy[i] *= tempper/mag;
-            vz[i] *= tempper/mag;
+            division = tempper/mag;
+            vx[i] *= division;
+            vy[i] *= division;
+            vz[i] *= division;
 
             i++;  // Increment the while loop
         }

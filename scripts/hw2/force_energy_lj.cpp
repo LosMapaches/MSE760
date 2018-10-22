@@ -24,11 +24,6 @@ void force_energy_lj(
     long double poshalf = l/2.0;
     long double neghalf = -poshalf;
 
-    // The coordinates of the i atom
-    long double rxi;
-    long double ryi;
-    long double rzi;
-
     // The difference between vectors
     long double drx;
     long double dry;
@@ -42,65 +37,61 @@ void force_energy_lj(
 
     // Acceleration
     long double acc;
-    long double incrementax = 0.0;
-    long double incrementay = 0.0;
-    long double incrementaz = 0.0;
+    long double incrementax;
+    long double incrementay;
+    long double incrementaz;
 
     for(int i = 0; i < atoms - 1; i++)
     {
-        rxi = rx[i];
-        ryi = ry[i];
-        rzi = rz[i];
-
         for(int j = i + 1; j < atoms; j++)
         {
-
             switch(periodic)
             {
             case 0:                     // No periodic boundary
 
-                drx = rxi-rx[j];
-                dry = ryi-ry[j];
-                drz = rzi-rz[j];
+                drx = rx[i]-rx[j];
+                dry = ry[i]-ry[j];
+                drz = rz[i]-rz[j];
 
             break;
 
             case 1:                     // Periodic boundary
 
-                if(rxi-rx[j] < neghalf)
-                    drx = rxi-rx[j]+l;
-                else if(rxi-rx[j] > poshalf)
-                    drx = rxi-rx[j]-l;
+                if(rx[i]-rx[j] < neghalf)
+                    drx = rx[i]-rx[j]+l;
+                else if(rx[i]-rx[j] > poshalf)
+                    drx = rx[i]-rx[j]-l;
                 else
-                    drx = rxi-rx[j];
+                    drx = rx[i]-rx[j];
 
-                if(ryi-ry[j] < neghalf)
-                    dry = ryi-ry[j]+l;
-                else if(ryi-ry[j] > poshalf)
-                    dry = ryi-ry[j]-l;
+                if(ry[i]-ry[j] < neghalf)
+                    dry = ry[i]-ry[j]+l;
+                else if(ry[i]-ry[j] > poshalf)
+                    dry = ry[i]-ry[j]-l;
                 else
-                    dry = ryi-ry[j];
+                    dry = ry[i]-ry[j];
 
-                if(rzi-rz[j] < neghalf)
-                    drz = rzi-rz[j]+l;
-                else if(rzi-rz[j] > poshalf)
-                    drz = rzi-rz[j]-l;
+                if(rz[i]-rz[j] < neghalf)
+                    drz = rz[i]-rz[j]+l;
+                else if(rz[i]-rz[j] > poshalf)
+                    drz = rz[i]-rz[j]-l;
                 else
-                    drz = rzi-rz[j];
+                    drz = rz[i]-rz[j];
 
             break;
             }
-
             distance = sqrt(pow(drx, 2.0)+pow(dry, 2.0)+pow(drz, 2.0));
 
             u = 1.0/pow(distance, 12.0)-1.0/pow(distance, 6.0);
             cohesive += u;
 
             acc = 1.0/pow(distance, 14.0)-0.5/pow(distance, 8.0);
+            acc *= 48.0;
 
-            incrementax += acc*drx;
-            incrementay += acc*dry;
-            incrementaz += acc*drz;
+            // Limit the number of computations
+            incrementax = acc*drx;
+            incrementay = acc*dry;
+            incrementaz = acc*drz;
 
             ax[i] += incrementax;
             ay[i] += incrementay;
@@ -109,19 +100,7 @@ void force_energy_lj(
             ax[j] -= incrementax;
             ay[j] -= incrementay;
             az[j] -= incrementaz;
-
         }
-
-        ax[i] *= 48.0;
-        ay[i] *= 48.0;
-        az[i] *= 48.0;
-
     }
-
     cohesive *= 4.0/atoms;
-
-    // The last atom multiplication
-    ax[atoms-1] *= 48.0;
-    ay[atoms-1] *= 48.0;
-    az[atoms-1] *= 48.0;
 }

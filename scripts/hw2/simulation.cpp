@@ -51,9 +51,6 @@ void simulate(
 
     // Half values
     long double halfdt = dt/2.0;
-    long double halfvx[atoms];
-    long double halfvy[atoms];
-    long double halfvz[atoms];
 
     for(int step = 1; step <= steps; step++)
     {
@@ -61,13 +58,15 @@ void simulate(
 
         for(int i = 0; i < atoms; i++)
         {
-            halfvx[i] = vx[i]+ax[i]*halfdt;
-            halfvy[i] = vy[i]+ay[i]*halfdt;
-            halfvz[i] = vz[i]+az[i]*halfdt;
+            // Calculate the half step velocites
+            vx[i] += ax[i]*halfdt;
+            vy[i] += ay[i]*halfdt;
+            vz[i] += az[i]*halfdt;
 
-            rx[i] += halfvx[i]*dt;
-            ry[i] += halfvy[i]*dt;
-            rz[i] += halfvz[i]*dt;
+            // Calculate the positions
+            rx[i] += vx[i]*dt;
+            ry[i] += vy[i]*dt;
+            rz[i] += vz[i]*dt;
         }
 
         // The acceleration coordinates for each atom
@@ -88,9 +87,10 @@ void simulate(
 
         for(int i = 0; i < atoms; i++)
         {
-            vx[i] = halfvx[i]+halfdt*ax[i];
-            vy[i] = halfvy[i]+halfdt*ay[i];
-            vz[i] = halfvz[i]+halfdt*az[i];
+            // Calculate the velocites
+            vx[i] += halfdt*ax[i];
+            vy[i] += halfdt*ay[i];
+            vz[i] += halfdt*az[i];
         }
 
         // The kinetic energy
