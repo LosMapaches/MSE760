@@ -38,13 +38,12 @@ for key in data:
     pl.legend(loc='best')
     pl.grid()
     pl.savefig('./figures/'+key+'single')
-    pl.show()
     pl.clf()
 
 for key in data:
     name = key.split('p')[-1]
     name = '0.'+name+' [ps]'
-    pl.plot(data[key]['time'][skip:], data[key]['total'][skip:], label=name)
+    pl.plot(data[key]['time'][skip:end], data[key]['total'][skip:end], label=name)
 
 pl.xlabel('Time [s]')
 pl.ylabel('Energy [eV/atom]')
