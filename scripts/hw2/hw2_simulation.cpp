@@ -32,21 +32,15 @@ main()
 
     /*
     long double tred = 0.001;              // Time step
-    long double t = unreduced_units(m, epsilon, sigma, 4, tred);
-
     int steps = 10000;                     // The number of steps
     */
 
     /*
     long double tred = 0.005;              // Time step
-    long double t = unreduced_units(m, epsilon, sigma, 4, tred);
-
     int steps = 2000;                      // The number of steps
     */
 
     long double tred = 0.02;               // Time step
-    long double t = unreduced_units(m, epsilon, sigma, 4, tred);
-
     int steps = 500;                       // The number of steps
 
     // Reduced units
@@ -102,19 +96,16 @@ main()
     energies << "time[s] cohesive[eV/atom] kinetic[eV/atom] total[eV/atom]";
     energies << "\n";
 
-    long double time;
     for(int i = 0; i <= steps; i++)
     {
-        time = t*i;
-        energies << time << " ";
+        energies << unreduced_units(m, epsilon, sigma, 4, tred*i) << " ";
 
         cohesive[i] = unreduced_units(m, epsilon, sigma, 2, cohesive[i]);
         cohesive[i] /= atoms;
         energies << cohesive[i] << " ";
 
         kinetic[i] = unreduced_units(m, epsilon, sigma, 3, kinetic[i]);
-        kinetic[i] *= 3.0/2.0*atoms*k;
-        kinetic[i] /= atoms;
+        kinetic[i] *= 3.0/2.0*k;  // Normalized by atoms
         energies << kinetic[i] << " ";
 
         energies << cohesive[i]+kinetic[i] << "\n";

@@ -16,44 +16,32 @@ void velocities(
     long double tempper = temperature*3.0;  // The temperature for each atom
 
     // Random number on unit sphere
-    long double s;
+    long double s2;
     long double zeta0;
     long double zeta1;
-    long double xi0[atoms];
-    long double xi1[atoms];
-    long double xi2[atoms];
+
+    // The maginitude for calulating a unit vector
+    long double mag;
 
     int i = 0;
     while(i < atoms)
     {
         zeta0 = (long double) 2.0*rand()/RAND_MAX-1.0;
         zeta1 = (long double) 2.0*rand()/RAND_MAX-1.0;
-        s = pow(zeta0, 2.0);
-        s += pow(zeta1, 2.0);
-        if(s < 1)
+        s2 = pow(zeta0, 2.0)+pow(zeta1, 2.0);
+        if(s2 < 1)
         {
-            xi0[i] = 2*pow(1-pow(s, 2.0), 0.5)*zeta0;
-            xi1[i] = 2*pow(1-pow(s, 2.0), 0.5)*zeta1;
-            xi2[i] = 1-2*pow(s, 2);
+            vx[i] = 2*pow(1-s2, 0.5)*zeta0;
+            vy[i] = 2*pow(1-s2, 0.5)*zeta1;
+            vz[i] = 1-2*s2;
+
+            mag = pow(pow(vx[i], 2.0)+pow(vy[i], 2.0)+pow(vz[i], 2.0), 0.5);
+
+            vx[i] *= tempper/mag;
+            vy[i] *= tempper/mag;
+            vz[i] *= tempper/mag;
 
             i++;  // Increment the while loop
         }
-    }
-
-    // The maginitude for calulating a unit vector
-    long double mag;
-
-    // Assign random vector directions to each atom
-    for(int i = 0; i < atoms; i++)
-    {
-        vx[i] = xi0[i];
-        vy[i] = xi1[i];
-        vz[i] = xi2[i];
-
-        mag = pow(pow(vx[i], 2.0)+pow(vy[i], 2.0)+pow(vz[i], 2.0), 0.5);
-
-        vx[i] *= tempper/mag;
-        vy[i] *= tempper/mag;
-        vz[i] *= tempper/mag;
     }
 }
