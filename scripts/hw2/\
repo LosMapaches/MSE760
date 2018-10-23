@@ -2,6 +2,8 @@
 Simulate position, velocity, and acceleration updates for a time.
 ----------------------------------------------------------------------------*/
 
+#include "pdf.cpp"                         // Pair Distribution Function
+
 void simulate(
               int         atoms,
               int         n,
@@ -19,13 +21,18 @@ void simulate(
               long double ay[],
               long double az[],
               long double l,
+              long double rho,
               long double dt,
               int         steps,
-              int         periodic
+              int         bins
               )
 {
     // Energies
     long double pe;
+
+    // RDF values
+    long double gr[bins];
+    long double dist[bins];
 
     // Coordinates for FCC lattice
     lattice_fcc(n, a, rx, ry, rz);
@@ -44,7 +51,7 @@ void simulate(
                     az,
                     l,
                     atoms,
-                    periodic,
+                    1,
                     pe
                     );
 
@@ -80,7 +87,7 @@ void simulate(
                         az,
                         l,
                         atoms,
-                        periodic,
+                        1,
                         pe
                         );
 

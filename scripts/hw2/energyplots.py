@@ -29,21 +29,23 @@ for item in files:
 skip = 0 # The skip to ignore settling data
 end = None
 for key in data:
-    pl.plot(data[key]['time'][skip:end], data[key]['cohesive'][skip:end], label='Potential')
-    pl.plot(data[key]['time'][skip:end], data[key]['kinetic'][skip:end], label='Kinetic')
-    pl.plot(data[key]['time'][skip:end], data[key]['total'][skip:end], label='Total')
+    if 'large' not in key:
+        pl.plot(data[key]['time'][skip:end], data[key]['cohesive'][skip:end], label='Potential')
+        pl.plot(data[key]['time'][skip:end], data[key]['kinetic'][skip:end], label='Kinetic')
+        pl.plot(data[key]['time'][skip:end], data[key]['total'][skip:end], label='Total')
 
-    pl.xlabel('Time [s]')
-    pl.ylabel('Energy [eV/atom]')
-    pl.legend(loc='best')
-    pl.grid()
-    pl.savefig('./figures/'+key+'single')
-    pl.clf()
+        pl.xlabel('Time [s]')
+        pl.ylabel('Energy [eV/atom]')
+        pl.legend(loc='best')
+        pl.grid()
+        pl.savefig('./figures/'+key+'single')
+        pl.clf()
 
 for key in data:
-    name = key.split('p')[-1]
-    name = '0.'+name+' [ps]'
-    pl.plot(data[key]['time'][skip:end], data[key]['total'][skip:end], label=name)
+    if 'large' not in key:
+        name = key.split('p')[-1]
+        name = '0.'+name+' [ps]'
+        pl.plot(data[key]['time'][skip:end], data[key]['total'][skip:end], label=name)
 
 pl.xlabel('Time [s]')
 pl.ylabel('Energy [eV/atom]')
@@ -51,3 +53,18 @@ pl.legend(loc='best')
 pl.grid()
 pl.savefig('./figures/all')
 pl.clf()
+
+skip = 0 # The skip to ignore settling data
+end = None
+for key in data:
+    if 'large' in key:
+        pl.plot(data[key]['time'][skip:end], data[key]['cohesive'][skip:end], label='Potential')
+        pl.plot(data[key]['time'][skip:end], data[key]['kinetic'][skip:end], label='Kinetic')
+        pl.plot(data[key]['time'][skip:end], data[key]['total'][skip:end], label='Total')
+
+        pl.xlabel('Time [s]')
+        pl.ylabel('Energy [eV/atom]')
+        pl.legend(loc='best')
+        pl.grid()
+        pl.savefig('./figures/'+key+'single')
+        pl.clf()

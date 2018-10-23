@@ -33,6 +33,8 @@ main()
     long double tred = 0.001;              // Time step
     int steps = 10000;                     // The number of steps
 
+    int periodic = 1;                      // Turn on PBC
+
     /*
     long double tred = 0.005;              // Time step
     int steps = 2000;                      // The number of steps
@@ -86,7 +88,8 @@ main()
              az,
              lred,
              tred,
-             steps
+             steps,
+             periodic
              );
 
     // Export the energies of the system with respect to time

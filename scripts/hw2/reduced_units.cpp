@@ -27,6 +27,8 @@ long double reduced_units(
             break;
         case 5: i /= epsilon/sigma; // Convert force
             break;
+        case 6: i *= pow(sigma, 3.0); // Convert deinsty
+            break;
     }
     return i;
 }

@@ -27,6 +27,7 @@ long double unreduced_units(
             break;
         case 5: i *= epsilon/sigma; // Convert force
             break;
+        case 6: i /= pow(sigma, 3.0); // Convert density
     }
     return i;
 }

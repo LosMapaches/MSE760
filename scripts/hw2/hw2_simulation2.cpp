@@ -30,6 +30,8 @@ main()
     int atoms = n*n*n*4;                   // Number of atoms
     long double l = n*a;                   // Side length of box
 
+    int periodic = 1;                      // Turn on PBC
+
     /*
     long double tred = 0.001;              // Time step
     int steps = 10000;                     // The number of steps
@@ -86,7 +88,8 @@ main()
              az,
              lred,
              tred,
-             steps
+             steps,
+             periodic
              );
 
     // Export the energies of the system with respect to time
