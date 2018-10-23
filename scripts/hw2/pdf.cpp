@@ -30,11 +30,9 @@ void pdf(
     long double distance;
 
     // RDF parameters
-    int ngr = 0.0;
     int ig;
-    long double delg = l/(2*bins);
-    long double vb;
-    long double nid;
+    long double delg = l/bins;
+    long double norm;
 
     // Clear RDF values
     for(int i = 0; i < bins; i++)
@@ -47,7 +45,6 @@ void pdf(
     for(int i = 0; i < bins; i++)
         dist[i] = i*delg;
 
-    ngr += 1;
     for(int i = 0; i < atoms - 1; i++)
     {
         for(int j = i + 1; j < atoms; j++)
@@ -89,15 +86,14 @@ void pdf(
             }
             distance = sqrt(pow(drx, 2.0)+pow(dry, 2.0)+pow(drz, 2.0));
 
-            ig = (int) distance/delg;
+            ig = (int) ceil(distance/delg);
             gr[ig] += 1;
         }
     }
     for(int i = 0; i < bins; i++)
     {
-        distance = delg*(i+0.5);
-        vb = (pow((i+1), 3.0)-pow(i, 3.0))*pow(delg, 3.0);
-        nid = (4.0/3.0)*3.14159*vb*rho;
-        gr[i] /= ngr*atoms*nid;
+        norm = pow(dist[i]+delg, 3.0)-pow(dist[i], 3.0);
+        norm *= (4.0/3.0)*3.14159*rho;
+        gr[i] /= norm;
     }
 }
