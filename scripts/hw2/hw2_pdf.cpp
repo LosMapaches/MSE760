@@ -21,30 +21,28 @@ Homework 2
 main()
 {
     long double a = 5.7e-10;               // Lattice constant [m]
-    long double m = 6.6e-26;               // Mass [kg]
+    long double m = 1.0;                   // Mass [-/atom]
     long double sigma = 3.4e-10;           // Length [m]
     long double epsilon = 0.0104;          // Energy [eV]
-    long double rho = 1.449;               // Density [kg/m^3]
 
     long double k = 8.6173303e-5;          // Boltzmann constant [eV/K]
 
     long double T = 500.0;                 // Temperature [K]
 
-    int n = 5;                             // Number of units cells [-]
+    int n = 5;                             // Number of units cells
     int atoms = n*n*n*4;                   // Number of atoms
     long double l = n*a;                   // Side length of box
 
-    long double tred = 0.005;              // Time step
-    int steps = 50;                        // The number of steps
+    long double tred = 0.02;               // Time step [-]
+    int steps = 500;                       // The number of steps
 
-    int bins = 15;                         // The number of bisn for RDF
+    int bins = 100;                        // The number of bisn for RDF
     int periodic = 1;                      // Turn on PBC
 
     // Reduced units
     long double ared = reduced_units(m, epsilon, sigma, 1, a);
     long double lred = reduced_units(m, epsilon, sigma, 1, l);
     long double Tred = reduced_units(m, epsilon, sigma, 3, T);
-    long double rhored = reduced_units(m, epsilon, sigma, 6, rho);
 
     // Coordinates
     long double rx[atoms];
@@ -74,7 +72,7 @@ main()
     lattice_fcc(n, ared, rx, ry, rz);
 
     // Calculate the pair distribution fuction at the beginning
-    pdf(rx, ry, rz, lred, rhored, atoms, periodic, bins, gr, dist);
+    pdf(rx, ry, rz, lred, atoms, periodic, bins, gr, dist);
 
     // Export the PDF for the inital configuration
     std::ofstream radialstart;
@@ -113,7 +111,7 @@ main()
              );
 
     // Calculate the pair distribution fuction at the end
-    pdf(rx, ry, rz, lred, rhored, atoms, periodic, bins, gr, dist);
+    pdf(rx, ry, rz, lred, atoms, periodic, bins, gr, dist);
 
     // Export the PDF for the end configuration
     std::ofstream radialend;
@@ -130,7 +128,7 @@ main()
     radialend.close();
 
     // Final Temperature
-    printf("Final Temperature: %Lf [K]", unreduced_units(m, epsilon, sigma, 3, kinetic[steps]));
+    printf("Final Temperature: %Lf [K]\n", unreduced_units(m, epsilon, sigma, 3, kinetic[steps]));
 
     // Export the energies of the system with respect to time
     std::ofstream energies;

@@ -9,7 +9,6 @@ void pdf(
          long double ry[],
          long double rz[],
          long double l,
-         long double rho,
          int         atoms,
          int         periodic,
          int         bins,
@@ -20,6 +19,7 @@ void pdf(
     // Half lengths
     long double poshalf = l/2.0;
     long double neghalf = -poshalf;
+    long double radialmax = sqrt(3.0*pow(poshalf, 2.0));
 
     // The difference between vectors
     long double drx;
@@ -31,8 +31,10 @@ void pdf(
 
     // RDF parameters
     int ig;
-    long double delg = l/bins;
     long double norm;
+    long double delg = radialmax/bins;
+    long double vol = pow(l, 3.0);
+    long double rho = atoms/vol;
 
     // Clear RDF values
     for(int i = 0; i < bins; i++)
@@ -40,10 +42,6 @@ void pdf(
         gr[i] = 0.0;
         dist[i] = 0.0;
     }
-
-    // Setup the distances
-    for(int i = 0; i < bins; i++)
-        dist[i] = i*delg;
 
     for(int i = 0; i < atoms - 1; i++)
     {
@@ -86,14 +84,19 @@ void pdf(
             }
             distance = sqrt(pow(drx, 2.0)+pow(dry, 2.0)+pow(drz, 2.0));
 
-            ig = (int) ceil(distance/delg);
-            gr[ig] += 1;
+            if(distance < radialmax)
+            {
+                ig = ceil(distance/delg);
+                gr[ig] += 2;
+            }
         }
     }
-    for(int i = 0; i < bins; i++)
+    for(int i = 1; i <= bins; i++)
     {
-        norm = pow(dist[i]+delg, 3.0)-pow(dist[i], 3.0);
-        norm *= (4.0/3.0)*3.14159*rho;
-        gr[i] /= norm;
+        distance = delg*(i+0.5);
+        dist[i-1] = distance;
+        norm = (pow(i+1, 3.0)-pow(i, 3.0))*pow(delg, 3.0);
+        norm *= (4.0/3.0)*3.14159265359*rho;
+        gr[i-1] /= norm*atoms;
     }
 }

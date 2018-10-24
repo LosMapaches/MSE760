@@ -34,6 +34,7 @@ void force_energy_lj(
 
     // The energy between atoms
     long double u;
+    cohesive = 0.0;
 
     // Acceleration
     long double acc;

@@ -44,7 +44,7 @@ for key in data:
 for key in data:
     if 'large' not in key:
         name = key.split('p')[-1]
-        name = '0.'+name+' [ps]'
+        name = '0.'+name+' [-] reduced L-J Time Step'
         pl.plot(data[key]['time'][skip:end], data[key]['total'][skip:end], label=name)
 
 pl.xlabel('Time [s]')
