@@ -20,6 +20,7 @@ void pdf(
     long double poshalf = l/2.0;
     long double neghalf = -poshalf;
     long double radialmax = sqrt(3.0*pow(poshalf, 2.0));
+    long double halfradialmax = radialmax/2.0;
 
     // The difference between vectors
     long double drx;
@@ -32,7 +33,7 @@ void pdf(
     // RDF parameters
     int ig;
     long double norm;
-    long double delg = radialmax/bins;
+    long double delg = halfradialmax/bins;
     long double vol = pow(l, 3.0);
     long double rho = atoms/vol;
 
@@ -84,7 +85,7 @@ void pdf(
             }
             distance = sqrt(pow(drx, 2.0)+pow(dry, 2.0)+pow(drz, 2.0));
 
-            if(distance < radialmax)
+            if(distance < halfradialmax)
             {
                 ig = ceil(distance/delg);
                 gr[ig] += 2;

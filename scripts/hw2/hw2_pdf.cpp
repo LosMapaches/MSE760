@@ -21,22 +21,23 @@ Homework 2
 main()
 {
     long double a = 5.7e-10;               // Lattice constant [m]
+    //long double m = 6.6e-26;               // Mass [kg]
     long double m = 1.0;                   // Mass [-/atom]
     long double sigma = 3.4e-10;           // Length [m]
     long double epsilon = 0.0104;          // Energy [eV]
 
     long double k = 8.6173303e-5;          // Boltzmann constant [eV/K]
 
-    long double T = 500.0;                 // Temperature [K]
+    long double T = 470.0;                 // Temperature [K]
 
     int n = 5;                             // Number of units cells
     int atoms = n*n*n*4;                   // Number of atoms
     long double l = n*a;                   // Side length of box
 
-    long double tred = 0.02;               // Time step [-]
-    int steps = 500;                       // The number of steps
+    long double tred = 0.005;              // Time step [-]
+    int steps = 250;                       // The number of steps
 
-    int bins = 100;                        // The number of bisn for RDF
+    int bins = 100;                        // The number of bins for RDF
     int periodic = 1;                      // Turn on PBC
 
     // Reduced units
