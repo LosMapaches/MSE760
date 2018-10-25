@@ -21,14 +21,13 @@ Homework 2
 main()
 {
     long double a = 5.7e-10;               // Lattice constant [m]
-    //long double m = 6.6e-26;               // Mass [kg]
     long double m = 1.0;                   // Mass [-/atom]
     long double sigma = 3.4e-10;           // Length [m]
     long double epsilon = 0.0104;          // Energy [eV]
 
     long double k = 8.6173303e-5;          // Boltzmann constant [eV/K]
 
-    long double T = 470.0;                 // Temperature [K]
+    long double T = 460.0;                 // Temperature [K]
 
     int n = 5;                             // Number of units cells
     int atoms = n*n*n*4;                   // Number of atoms
