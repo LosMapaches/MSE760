@@ -24,6 +24,7 @@ void velocities(
     long double mag;
     long double division;
 
+    srand(time(NULL));  //Set seed for randomizer
     int i = 0;
     while(i < atoms)
     {

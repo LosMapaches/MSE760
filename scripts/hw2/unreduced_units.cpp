@@ -23,7 +23,7 @@ long double unreduced_units(
             break;
         case 3: i *= epsilon/k; // Convert temperature
             break;
-        case 4: i *= sqrt((m*pow(sigma, 2.0))/epsilon); // Convert time
+        case 4: i *= sigma*sqrt(m/epsilon); // Convert time
             break;
         case 5: i *= epsilon/sigma; // Convert force
             break;
