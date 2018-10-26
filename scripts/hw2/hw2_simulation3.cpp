@@ -104,7 +104,6 @@ main()
         energies << unreduced_units(m, epsilon, sigma, 4, tred*i) << " ";
 
         cohesive[i] = unreduced_units(m, epsilon, sigma, 2, cohesive[i]);
-        cohesive[i] /= atoms;
         energies << cohesive[i] << " ";
 
         kinetic[i] = unreduced_units(m, epsilon, sigma, 3, kinetic[i]);
