@@ -62,7 +62,7 @@ for key in data:
     if 'large' in key:
         pl.plot(data[key]['time'][skip:end], data[key]['cohesive'][skip:end], label='Potential')
         pl.plot(data[key]['time'][skip:end], data[key]['kinetic'][skip:end], label='Kinetic')
-        pl.plot(data[key]['time'][skip:end], data[key]['total'][skip:end], label='Total')
+        pl.plot(data[key]['time'][skip:end], data[key]['total'][skip:end], '--', label='Total')
 
         pl.xlabel('Time [s]')
         pl.ylabel('Energy [eV/atom]')
