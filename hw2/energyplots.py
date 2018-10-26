@@ -1,5 +1,5 @@
 from matplotlib import pyplot as pl
-
+import itertools
 import os
 
 directory = './energies/'
@@ -42,11 +42,14 @@ for key in data:
         pl.savefig('./figures/'+key+'single')
         pl.clf()
 
+line = ['--', '-.', ':']
+count = 0
 for key in data:
     if 'large' not in key:
         name = key.split('p')[-1]
         name = '0.'+name+' [-] reduced LJ Time Step'
-        pl.plot(data[key]['time'][skip:end], data[key]['total'][skip:end], label=name)
+        pl.plot(data[key]['time'][skip:end], data[key]['total'][skip:end], linestyle=line[count], label=name)
+        count += 1
 
 pl.xlabel('Time [s]')
 pl.ylabel('Energy [eV/atom]')
@@ -62,7 +65,7 @@ for key in data:
     if 'large' in key:
         pl.plot(data[key]['time'][skip:end], data[key]['cohesive'][skip:end], label='Potential')
         pl.plot(data[key]['time'][skip:end], data[key]['kinetic'][skip:end], label='Kinetic')
-        pl.plot(data[key]['time'][skip:end], data[key]['total'][skip:end], '--', label='Total')
+        pl.plot(data[key]['time'][skip:end], data[key]['total'][skip:end], label='Total')
 
         pl.xlabel('Time [s]')
         pl.ylabel('Energy [eV/atom]')
