@@ -38,19 +38,21 @@ for key in data:
         pl.ylabel('Energy [eV/atom]')
         pl.legend(loc='best')
         pl.grid()
+        pl.tight_layout()
         pl.savefig('./figures/'+key+'single')
         pl.clf()
 
 for key in data:
     if 'large' not in key:
         name = key.split('p')[-1]
-        name = '0.'+name+' [-] reduced L-J Time Step'
+        name = '0.'+name+' [-] reduced LJ Time Step'
         pl.plot(data[key]['time'][skip:end], data[key]['total'][skip:end], label=name)
 
 pl.xlabel('Time [s]')
 pl.ylabel('Energy [eV/atom]')
 pl.legend(loc='best')
 pl.grid()
+pl.tight_layout()
 pl.savefig('./figures/all')
 pl.clf()
 
@@ -66,5 +68,6 @@ for key in data:
         pl.ylabel('Energy [eV/atom]')
         pl.legend(loc='best')
         pl.grid()
+        pl.tight_layout()
         pl.savefig('./figures/'+key+'single')
         pl.clf()
