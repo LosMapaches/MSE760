@@ -13,7 +13,7 @@ void energy(
             long double rz[],
             long double l,
             int         atoms,
-			int         i,
+            int         i,
             int         periodic,
             long double &cohesive
             )
@@ -36,9 +36,9 @@ void energy(
 
     for(int j = 0; j < atoms; j++)
     {
-		// Skip the starting atom
-		if(j == i)
-			j += 1;
+        // Skip the starting atom
+	if(j == i)
+	    j += 1;
 
         switch(periodic)
         {
