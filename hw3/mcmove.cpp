@@ -24,8 +24,8 @@ void mcmove(
     long double beta = 1.0/(T*epsilon);
 
     int index = rand() % atoms;  // Index of random atom
-    long double cohesive1 = 0.0;
-    long double cohesive2 = 0.0;
+    long double energy1 = 0.0;
+    long double energy2 = 0.0;
 
     // Trial data
     long double trialrx[atoms];
@@ -33,12 +33,16 @@ void mcmove(
     long double trialrz[atoms];
 
     // Calculate the energy of the atom
-    energy(rx, ry, rz, l, atoms, index, 1, cohesive1);
+    energy(rx, ry, rz, l, atoms, index, 1, energy1);
 
     // Random Displacement
-    trialrx[index] = rx[index]+(rand()/(RAND_MAX)-0.5)*delta;
-    trialry[index] = ry[index]+(rand()/(RAND_MAX)-0.5)*delta;
-    trialrz[index] = rz[index]+(rand()/(RAND_MAX)-0.5)*delta;
+    long double random1 = (long double)rand()/(long double)(RAND_MAX);
+    long double random2 = (long double)rand()/(long double)(RAND_MAX);
+    long double random3 = (long double)rand()/(long double)(RAND_MAX);
+
+    trialrx[index] = (long double) rx[index]+(random1-0.5)*delta;
+    trialry[index] = (long double) ry[index]+(random2-0.5)*delta;
+    trialrz[index] = (long double) rz[index]+(random3-0.5)*delta;
 
     // Assign trial
     for(int i = 0; i < atoms; i++)
@@ -52,20 +56,23 @@ void mcmove(
         trialrz[i] = rz[i];
     }
     // Calculate the energy of the atom
-    energy(trialrx, trialry, trialrz, l, atoms, index, 1, cohesive2);
+    energy(trialrx, trialry, trialrz, l, atoms, index, 1, energy2);
+
+    long double randomcriterion = (long double)rand()/(long double)(RAND_MAX);
 
     // Acceptance criterion
-    if(rand()/(RAND_MAX) < pow(e, -beta*(cohesive2-cohesive1)))
+    if(randomcriterion < pow(e, -beta*(energy2-energy1)))
     {
         rx[index] = trialrx[index];
         ry[index] = trialry[index];
         rz[index] = trialrz[index];
-        energyout = cohesive2;
+
+        energyout = energy2;
         accept = 1;
     }
     else
     {
-        energyout = cohesive1;
+        energyout = energy1;
         accept = 0;
     }
 }

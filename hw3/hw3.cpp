@@ -43,7 +43,7 @@ main()
     long double energyout = 0.0;
 
     // Atom displacement
-    long double delta = ared/lred;  // Beginning displacement criterion
+    long double delta = 2*ared/lred;  // Beginning displacement criterion
 
     // If move is accepted
     int accept;
@@ -66,14 +66,16 @@ main()
 	control1 += accept;
         control2 = (long double) control1/i;
 
+        /*
         if(control2 < percent)
             delta -= percentcontrol;
         else if(control2 > percent)
             delta += percentcontrol;
+        */
 
         printf("%i ", i);
         printf("%Lf ", control2);
-        printf("%Lf ", delta);
+        //printf("%Lf ", delta);
         printf("%Lf \n", unreduced_units(m, epsilon, sigma, 2, energyout));
     }
 }

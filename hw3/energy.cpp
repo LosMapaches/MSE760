@@ -15,7 +15,7 @@ void energy(
             int         atoms,
             int         i,
             int         periodic,
-            long double &cohesive
+            long double &energy
             )
 {
     // Half lengths
@@ -32,7 +32,7 @@ void energy(
 
     // The energy between atoms
     long double u;
-    cohesive = 0.0;
+    energy = 0.0;
 
     for(int j = 0; j < atoms; j++)
     {
@@ -75,7 +75,7 @@ void energy(
         }
         distance = sqrt(pow(drx, 2.0)+pow(dry, 2.0)+pow(drz, 2.0));
         u = 1.0/pow(distance, 12.0)-1.0/pow(distance, 6.0);
-        cohesive += u;
+        energy += u;
     }
-    cohesive *= 4.0;
+    energy *= 4.0;
 }
