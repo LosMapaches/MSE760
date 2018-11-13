@@ -20,14 +20,24 @@ boundary                                    p p p
 # Geometric
 variable                                    side                      equal  11
 
+# Percentage
+variable                                    element                   equal  2
+variable                                    decimal                   equal  0.005
+
 # Time variables
 variable                                    mytimestep                equal  0.001
+variable                                    holdsteps                 equal  40000
+variable                                    runsteps                  equal  49750
+
+# Temperature variables
+variable                                    ti                        equal  2000.0
+variable                                    tf                        equal  10.0
 
 # Random seed
 variable                                    seed                      equal  1597
 
 # Data output
-variable                                    mydumprate                equal  1
+variable                                    mydumprate                equal  100
 variable                                    data_file_characteristics string data.txt
 variable                                    data_file_dump_rate       string trj.lammpstrj
 variable                                    data_positions_final      string final.dat
@@ -42,7 +52,7 @@ create_box                                  2 my_box
 create_atoms                                1 box
 
 # Set the percent of atoms
-set                                         group all type/fraction 2 0.005 ${seed}
+set                                         group all type/fraction ${element} ${decimal} ${seed}
 
 ################################################################################
 
@@ -69,7 +79,7 @@ timestep                                    ${mytimestep}
 ################################################################################
 
 # Save atom positions at an interval
-dump                                        my_dump_rate all custom ${mydumprate} ${data_file_dump_rate} id type ux uy uz
+dump                                        my_dump_rate all custom ${mydumprate} ${data_file_dump_rate} id type xu yu zu
 dump_modify                                 my_dump_rate sort id
 
 ################################################################################
@@ -78,16 +88,16 @@ dump_modify                                 my_dump_rate sort id
 fix                                         data_saving all ave/time 1 1 ${mydumprate} c_mytemp c_mypress v_myvol c_PE c_KE file ${data_file_characteristics}
 
 # Define the initial velocities
-velocity                                    all create 1100 ${seed} rot yes dist gaussian
+velocity                                    all create ${ti} ${seed} rot yes dist gaussian
 
 # Hold as melt
-fix                                         runhold all npt temp 1100 1100 1.0 iso 0 0 1000.0
-run                                         40000
+fix                                         runhold all npt temp ${ti} ${ti} 1.0 iso 0 0 1000.0
+run                                         ${holdsteps}
 unfix                                       runhold
 
 # Cool the run
-fix                                         runcool all npt temp 1100 300 1.0 iso 0 0 1000.0
-run                                         80000000
+fix                                         runcool all npt temp ${ti} ${tf} 1.0 iso 0 0 1000.0
+run                                         ${runsteps}
 unfix                                       runcool
 
 # Close save data
