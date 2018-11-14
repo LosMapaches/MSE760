@@ -11,20 +11,16 @@ def function(E, T):
     kb = 8.6173303e-5  # [eV/K]
     return E-3.0*kb*T
 
-runs, param = data(6)
-
-almass = 4.4803895e-23  # [g]
-smmass = 2.4967863e-22  # [g]
+runs, param = data(400)
 
 for run in runs:
     runs[run] = runs[run].sort_values(by='c_mytemp', ascending=True)
 
-    volume = runs[run]['v_myvol']
-    mass = param[run]['atoms']*(smmass*param[run]['decimal']+almass*(1.0-param[run]['decimal']))
-    term = [i/mass for i in volume]
+    energy = runs[run]['c_PE']+runs[run]['c_KE']
+    energy = [i/param[run]['atoms'] for i in energy]
+    term = [function(i, j) for i, j in zip(energy, runs[run]['c_mytemp'])]
 
     percentage = run.split('percent')[0]
-
     percentage = percentage.split('p')
     percentage = percentage[0]+'.'+percentage[1]+' % Sm'
 
@@ -35,7 +31,7 @@ for run in runs:
     # Find bottom percent of data to fit
     length = len(xdata)
     start0 = 0
-    end0 = math.floor(0.1*length)
+    end0 = math.floor(0.15*length)
 
     x0 = xdata[start0:end0]
     y0 = term[start0:end0]
@@ -76,7 +72,7 @@ for run in runs:
         pass
 
     sub.set_xlabel('Temperature [K] for '+percentage)
-    sub.set_ylabel('Specific Volume [A^3/g]')
+    sub.set_ylabel('E-3*k_b*T [eV/atom]')
     sub.legend(loc='upper left')
     sub.grid()
-    fig.savefig('../figures/Volume_AlSm_slow_'+run)
+    fig.savefig('../figures/Energy_AlSm_slow_'+run)

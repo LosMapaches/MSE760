@@ -34,8 +34,8 @@ def importdata(skip):
                 if 'side' in values:
                     side = int(values[-1])
 
-                if 'type/fraction' in values:
-                    decimal = float(values[-2])
+                if 'decimal' in values:
+                    decimal = float(values[-1])
 
         atoms = 4*side**3
         param[item.split('/')[-2]] = {

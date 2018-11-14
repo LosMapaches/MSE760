@@ -33,7 +33,7 @@ for run in runs:
     # Find bottom percent of data to fit
     length = len(xdata)
     start0 = 0
-    end0 = math.floor(0.1*length)
+    end0 = math.floor(0.15*length)
 
     x0 = xdata[start0:end0]
     y0 = term[start0:end0]
@@ -45,7 +45,7 @@ for run in runs:
     sub.plot(xdata, yfit0, 'r', label='Fit Range of '+fitrange0+' [K]')
 
     # Find top percent of data to fit
-    start1 = math.floor(0.3*length)
+    start1 = math.ceil(0.15*length)
     end1 = -1
     x1 = xdata[start1:end1]
     y1 = term[start1:end1]
@@ -59,12 +59,12 @@ for run in runs:
     try:
         npoints = 2
         point = [0]*(npoints+1)  # A point larger than 1 to start with
-        tolerance = 0.01  # The initial tolerance
+        tolerance = abs(max(term)-min(term))  # The initial tolerance
 
         # Iterate until point of intersection is found between fits
         while len(point) > npoints:
             point = np.argwhere(np.isclose(yfit0, yfit1, atol=tolerance)).reshape(-1)
-            tolerance -= 0.0005
+            tolerance -= tolerance/10
 
         temps = np.array(xdata)[point]
         temp = math.floor(sum(temps)/len(temps))
@@ -77,4 +77,4 @@ for run in runs:
     sub.set_ylabel('E-3*k_b*T [eV/atom]')
     sub.legend(loc='upper left')
     sub.grid()
-    fig.savefig('../figures/AlSm_slow_'+run)
+    fig.savefig('../figures/Energy_AlSm_slow_'+run)

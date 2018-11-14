@@ -6,25 +6,17 @@ import math
 
 from dataimport import importdata as data
 
-
-def function(E, T):
-    kb = 8.6173303e-5  # [eV/K]
-    return E-3.0*kb*T
-
-runs, param = data(6)
+runs, param = data(400)
 
 almass = 4.4803895e-23  # [g]
 smmass = 2.4967863e-22  # [g]
 
 for run in runs:
-    runs[run] = runs[run].sort_values(by='c_mytemp', ascending=True)
-
     volume = runs[run]['v_myvol']
     mass = param[run]['atoms']*(smmass*param[run]['decimal']+almass*(1.0-param[run]['decimal']))
     term = [i/mass for i in volume]
 
     percentage = run.split('percent')[0]
-
     percentage = percentage.split('p')
     percentage = percentage[0]+'.'+percentage[1]+' % Sm'
 
