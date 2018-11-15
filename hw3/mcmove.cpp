@@ -8,6 +8,8 @@ This performs Monete Carlo simulation
 void mcmove(
             int         atoms,
 	    long double l,
+            long double m,
+            long double sigma,
 	    long double epsilon,
 	    long double T,
 	    long double delta,
@@ -20,8 +22,7 @@ void mcmove(
 
 {
     // Constants
-    long double e = 2.718281828;
-    long double beta = 1.0/(T*epsilon);
+    long double beta = (long double) 1.0/(T*epsilon);
 
     int index = rand() % atoms;  // Index of random atom
     long double energy1 = 0.0;
@@ -55,13 +56,16 @@ void mcmove(
         trialry[i] = ry[i];
         trialrz[i] = rz[i];
     }
+
     // Calculate the energy of the atom
     energy(trialrx, trialry, trialrz, l, atoms, index, 1, energy2);
 
     long double randomcriterion = (long double)rand()/(long double)(RAND_MAX);
 
     // Acceptance criterion
-    if(randomcriterion < pow(e, -beta*(energy2-energy1)))
+    long double edelta = unreduced_units(m, epsilon, sigma, 2, energy2);
+    edelta -= unreduced_units(m, epsilon, sigma, 2, energy1);
+    if(randomcriterion < (long double) exp(-beta*(edelta)))
     {
         rx[index] = trialrx[index];
         ry[index] = trialry[index];

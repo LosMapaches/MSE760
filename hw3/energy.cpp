@@ -13,7 +13,7 @@ void energy(
             long double rz[],
             long double l,
             int         atoms,
-            int         i,
+            int         index,
             int         periodic,
             long double &energy
             )
@@ -31,51 +31,49 @@ void energy(
     long double distance;
 
     // The energy between atoms
-    long double u;
     energy = 0.0;
 
-    for(int j = 0; j < atoms; j++)
+    for(int i = 0; i < atoms; i++)
     {
         // Skip the starting atom
-	if(j == i)
-	    j += 1;
+	if(index == i)
+	    i += 1;
 
         switch(periodic)
         {
         case 0:                     // No periodic boundary
-            drx = rx[i]-rx[j];
-            dry = ry[i]-ry[j];
-            drz = rz[i]-rz[j];
+            drx = rx[i]-rx[index];
+            dry = ry[i]-ry[index];
+            drz = rz[i]-rz[index];
 
         break;
 
         case 1:                     // Periodic boundary
-            if(rx[i]-rx[j] < neghalf)
-                drx = rx[i]-rx[j]+l;
-            else if(rx[i]-rx[j] > poshalf)
-                drx = rx[i]-rx[j]-l;
+            if(rx[i]-rx[index] < neghalf)
+                drx = rx[i]-rx[index]+l;
+            else if(rx[i]-rx[index] > poshalf)
+                drx = rx[i]-rx[index]-l;
             else
-                drx = rx[i]-rx[j];
+                drx = rx[i]-rx[index];
 
-            if(ry[i]-ry[j] < neghalf)
-                dry = ry[i]-ry[j]+l;
-            else if(ry[i]-ry[j] > poshalf)
-                dry = ry[i]-ry[j]-l;
+            if(ry[i]-ry[index] < neghalf)
+                dry = ry[i]-ry[index]+l;
+            else if(ry[i]-ry[index] > poshalf)
+                dry = ry[i]-ry[index]-l;
             else
-                dry = ry[i]-ry[j];
+                dry = ry[i]-ry[index];
 
-            if(rz[i]-rz[j] < neghalf)
-                drz = rz[i]-rz[j]+l;
-            else if(rz[i]-rz[j] > poshalf)
-                drz = rz[i]-rz[j]-l;
+            if(rz[i]-rz[index] < neghalf)
+                drz = rz[i]-rz[index]+l;
+            else if(rz[i]-rz[index] > poshalf)
+                drz = rz[i]-rz[index]-l;
             else
-                drz = rz[i]-rz[j];
+                drz = rz[i]-rz[index];
 
         break;
         }
         distance = sqrt(pow(drx, 2.0)+pow(dry, 2.0)+pow(drz, 2.0));
-        u = 1.0/pow(distance, 12.0)-1.0/pow(distance, 6.0);
-        energy += u;
+        energy += 1.0/pow(distance, 12.0)-1.0/pow(distance, 6.0);
     }
     energy *= 4.0;
 }
