@@ -21,19 +21,16 @@ main()
     long double k = 8.6173303e-5;          // Boltzmann constant [eV/K]
     long double T = 240.0;                 // Temperature [K]
 
-    int n = 4;                             // Number of units cells
+    int n = 7;                             // Number of units cells
     int atoms = n*n*n*4;                   // Number of atoms
     long double l = n*a;                   // Side length of box
-    int steps = 1e5;                       // Number of simulation steps
-    long double beta = 1.0/(T*k);
+    int steps = 1e6;                       // Number of simulation steps
 
     // Reduced units
     long double ared = reduced_units(m, epsilon, sigma, 1, a);
     long double lred = reduced_units(m, epsilon, sigma, 1, l);
     long double Tred = reduced_units(m, epsilon, sigma, 3, T);
     long double rhored = 0.84;             // Reduced density
-    long double betared = reduced_units(m, epsilon, sigma, 2, 1.0/beta);
-    betared = pow(betared, -1.0);
 
     // Coordinates
     long double rx[atoms];
@@ -44,7 +41,7 @@ main()
     long double energyout = 0.0;
 
     // Atom displacement
-    long double delta = 0.9*ared/lred;  // Beginning displacement criterion
+    long double delta = 0.16;  // Beginning displacement criterion
 
     // If move is accepted
     int accept;
@@ -66,7 +63,7 @@ main()
     int periodic = 1;  // Turn on periodic boundry conditions
     for(int i = 1; i <= steps; i++)
     {
-       	mcmove(atoms, lred, betared, Tred, delta, rx, ry, rz, periodic, energyout, accept);
+       	mcmove(atoms, lred, Tred, delta, rx, ry, rz, periodic, energyout, accept);
         energyoutev = unreduced_units(m, epsilon, sigma, 2, energyout);
 
 	control1 += accept;

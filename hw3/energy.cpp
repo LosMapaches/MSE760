@@ -11,9 +11,12 @@ void energy(
             long double rx[],
             long double ry[],
             long double rz[],
+            long double rxatom,
+            long double ryatom,
+            long double rzatom,
+            int         index,
             long double l,
             int         atoms,
-            int         index,
             int         periodic,
             long double &energy
             )
@@ -42,33 +45,33 @@ void energy(
         switch(periodic)
         {
         case 0:                     // No periodic boundary
-            drx = rx[i]-rx[index];
-            dry = ry[i]-ry[index];
-            drz = rz[i]-rz[index];
+            drx = rx[i]-rxatom;
+            dry = ry[i]-ryatom;
+            drz = rz[i]-rzatom;
 
         break;
 
         case 1:                     // Periodic boundary
-            if(rx[i]-rx[index] < neghalf)
-                drx = rx[i]-rx[index]+l;
-            else if(rx[i]-rx[index] > poshalf)
-                drx = rx[i]-rx[index]-l;
+            if(rx[i]-rxatom < neghalf)
+                drx = rx[i]-rxatom+l;
+            else if(rx[i]-rxatom > poshalf)
+                drx = rx[i]-rxatom-l;
             else
-                drx = rx[i]-rx[index];
+                drx = rx[i]-rxatom;
 
-            if(ry[i]-ry[index] < neghalf)
-                dry = ry[i]-ry[index]+l;
-            else if(ry[i]-ry[index] > poshalf)
-                dry = ry[i]-ry[index]-l;
+            if(ry[i]-ryatom < neghalf)
+                dry = ry[i]-ryatom+l;
+            else if(ry[i]-ryatom > poshalf)
+                dry = ry[i]-ryatom-l;
             else
-                dry = ry[i]-ry[index];
+                dry = ry[i]-ryatom;
 
-            if(rz[i]-rz[index] < neghalf)
-                drz = rz[i]-rz[index]+l;
-            else if(rz[i]-rz[index] > poshalf)
-                drz = rz[i]-rz[index]-l;
+            if(rz[i]-rzatom < neghalf)
+                drz = rz[i]-rzatom+l;
+            else if(rz[i]-rzatom > poshalf)
+                drz = rz[i]-rzatom-l;
             else
-                drz = rz[i]-rz[index];
+                drz = rz[i]-rzatom;
 
         break;
         }
