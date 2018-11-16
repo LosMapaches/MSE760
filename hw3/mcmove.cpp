@@ -8,22 +8,18 @@ This performs Monete Carlo simulation
 void mcmove(
             int         atoms,
 	    long double l,
-            long double m,
-            long double sigma,
-	    long double epsilon,
+	    long double beta,
 	    long double T,
 	    long double delta,
 	    long double rx[],
 	    long double ry[],
 	    long double rz[],
+            int         periodic,
 	    long double &energyout,
 	    int         &accept
 	    )
 
 {
-    // Constants
-    long double beta = (long double) 1.0/(T*epsilon);
-
     int index = rand() % atoms;  // Index of random atom
     long double energy1 = 0.0;
     long double energy2 = 0.0;
@@ -34,7 +30,7 @@ void mcmove(
     long double trialrz[atoms];
 
     // Calculate the energy of the atom
-    energy(rx, ry, rz, l, atoms, index, 1, energy1);
+    energy(rx, ry, rz, l, atoms, index, periodic, energy1);
 
     // Random Displacement
     long double random1 = (long double)rand()/(long double)(RAND_MAX);
@@ -50,7 +46,7 @@ void mcmove(
     {
         // Skip the filled index
         if(i == index)
-            i += 1;
+            i++;
 
         trialrx[i] = rx[i];
         trialry[i] = ry[i];
@@ -58,14 +54,12 @@ void mcmove(
     }
 
     // Calculate the energy of the atom
-    energy(trialrx, trialry, trialrz, l, atoms, index, 1, energy2);
+    energy(trialrx, trialry, trialrz, l, atoms, index, periodic, energy2);
 
     long double randomcriterion = (long double)rand()/(long double)(RAND_MAX);
 
     // Acceptance criterion
-    long double edelta = unreduced_units(m, epsilon, sigma, 2, energy2);
-    edelta -= unreduced_units(m, epsilon, sigma, 2, energy1);
-    if(randomcriterion < (long double) exp(-beta*(edelta)))
+    if(randomcriterion < (long double) exp(-beta*(energy2-energy1)))
     {
         rx[index] = trialrx[index];
         ry[index] = trialry[index];
@@ -74,6 +68,7 @@ void mcmove(
         energyout = energy2;
         accept = 1;
     }
+
     else
     {
         energyout = energy1;

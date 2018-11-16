@@ -37,7 +37,7 @@ void energy(
     {
         // Skip the starting atom
 	if(index == i)
-	    i += 1;
+	    i++;
 
         switch(periodic)
         {
