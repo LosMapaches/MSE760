@@ -75,4 +75,4 @@ for run in runs:
     sub.set_ylabel('E-3*k_b*T [eV/atom]')
     sub.legend(loc='upper left')
     sub.grid()
-    fig.savefig('../figures/Energy_AlSm_slow_'+run)
+    fig.savefig('../figures/Energy_AlSm_'+run)

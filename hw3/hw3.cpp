@@ -21,7 +21,7 @@ main()
     long double k = 8.6173303e-5;          // Boltzmann constant [eV/K]
     long double T = 240.0;                 // Temperature [K]
 
-    int n = 7;                             // Number of units cells
+    int n = 4;                             // Number of units cells
     int atoms = n*n*n*4;                   // Number of atoms
     long double l = n*a;                   // Side length of box
     int steps = 1e6;                       // Number of simulation steps
@@ -32,6 +32,8 @@ main()
     long double Tred = reduced_units(m, epsilon, sigma, 3, T);
     long double rhored = 0.84;             // Reduced density
 
+    int periodic = 1;  // Turn on periodic boundry conditions
+
     // Coordinates
     long double rx[atoms];
     long double ry[atoms];
@@ -39,6 +41,7 @@ main()
 
     // Energy
     long double energyout = 0.0;
+    long double cohesive = 0.0;
 
     // Atom displacement
     long double delta = 0.16;  // Beginning displacement criterion
@@ -47,8 +50,6 @@ main()
     int accept;
     int control1 = 0;  // For the summation of acceptances
     long double control2;  // For determining the percent acceptance
-
-    long double energyoutev = 0.0;
 
     // Coordinates for FCC lattice
     lattice_fcc(n, ared, rx, ry, rz);
@@ -60,21 +61,21 @@ main()
     energies.open("./energies.txt");
 
     energies << "Step AcceptanceRate Energy[eV]\n";
-    int periodic = 1;  // Turn on periodic boundry conditions
+    long double difference = 0.0;
     for(int i = 1; i <= steps; i++)
     {
        	mcmove(atoms, lred, Tred, delta, rx, ry, rz, periodic, energyout, accept);
-        energyoutev = unreduced_units(m, epsilon, sigma, 2, energyout);
+        energyout = unreduced_units(m, epsilon, sigma, 2, energyout);
 
 	control1 += accept;
         control2 = (long double) control1/i;
 
         printf("Step: %i |", i);
         printf("Acceptance: %Lf |", control2);
-        printf("Energy [eV]: %Lf \n", energyoutev);
+        printf("Energy [eV]: %Lf \n", energyout);
 
         energies << i << " ";
         energies << control2 << " ";
-        energies << energyoutev << "\n";
+        energies << energyout << "\n";
     }
 }

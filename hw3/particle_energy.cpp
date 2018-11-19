@@ -7,19 +7,19 @@ Also returns the acceleration coordinates for atoms.
 #include <math.h>
 
 // Return the cohesive energy and accelerations of the system
-void energy(
-            long double rx[],
-            long double ry[],
-            long double rz[],
-            long double rxatom,
-            long double ryatom,
-            long double rzatom,
-            int         index,
-            long double l,
-            int         atoms,
-            int         periodic,
-            long double &energy
-            )
+void particle_energy(
+                     long double rx[],
+                     long double ry[],
+                     long double rz[],
+                     long double rxatom,
+                     long double ryatom,
+                     long double rzatom,
+                     int         index,
+                     long double l,
+                     int         atoms,
+                     int         periodic,
+                     long double &energy
+                     )
 {
     // Half lengths
     long double poshalf = l/2.0;

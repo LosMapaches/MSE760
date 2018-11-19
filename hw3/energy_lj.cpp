@@ -7,15 +7,15 @@ Also returns the acceleration coordinates for atoms.
 #include <math.h>
 
 // Return the cohesive energy and accelerations of the system
-void force_energy_lj(
-                     long double rx[],
-                     long double ry[],
-                     long double rz[],
-                     long double l,
-                     int         atoms,
-                     int         periodic,
-                     long double &cohesive
-                     )
+void energy_lj(
+               long double rx[],
+               long double ry[],
+               long double rz[],
+               long double l,
+               int         atoms,
+               int         periodic,
+               long double &cohesive
+               )
 {
     // Half lengths
     long double poshalf = l/2.0;

@@ -71,4 +71,4 @@ for run in runs:
     sub.set_ylabel('Specific Volume [A^3/g]')
     sub.legend(loc='upper left')
     sub.grid()
-    fig.savefig('../figures/Volume_AlSm_slow_'+run)
+    fig.savefig('../figures/Volume_AlSm_'+run)

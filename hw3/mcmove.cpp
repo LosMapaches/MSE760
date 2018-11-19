@@ -2,9 +2,10 @@
 This performs Monete Carlo simulation
 ----------------------------------------------------*/
 
-#include <cstdlib>              // srand, rand
-#include "energy.cpp"           // Calculate energy
-#include "force_energy_lj.cpp"  // Cohesive energy
+#include <cstdlib>                // srand, rand
+
+#include "particle_energy.cpp"    // Calculate energy
+#include "energy_lj.cpp"          // Cohesive energy
 
 void mcmove(
             int         atoms,
@@ -25,8 +26,19 @@ void mcmove(
     long double energy2 = 0.0;
     long double cohesive = 0.0;
 
+    // Calculate the total energy
+    energy_lj(
+              rx,
+              ry,
+              rz,
+              l,
+              atoms,
+              periodic,
+              cohesive
+              );
+
     // Calculate the energy of the atom
-    energy(rx, ry, rz, rx[index], ry[index], rz[index], index, l, atoms, periodic, energy1);
+    particle_energy(rx, ry, rz, rx[index], ry[index], rz[index], index, l, atoms, periodic, energy1);
 
     // Random Displacement
     long double random1 = (long double)rand()/(long double)(RAND_MAX);
@@ -39,7 +51,7 @@ void mcmove(
     long double trialrz = (long double) rz[index]+(random3-0.5)*delta;
 
     // Calculate the energy of the atom
-    energy(rx, ry, rz, trialrx, trialry, trialrz, index, l, atoms, periodic, energy2);
+    particle_energy(rx, ry, rz, trialrx, trialry, trialrz, index, l, atoms, periodic, energy2);
 
     long double randomcriterion = (long double)rand()/(long double)(RAND_MAX);
 
@@ -59,17 +71,6 @@ void mcmove(
         energyout = energy1;
         accept = 0;
     }
-
-    // Calculate the total energy
-    force_energy_lj(
-                    rx,
-                    ry,
-                    rz,
-                    l,
-                    atoms,
-                    1,
-                    cohesive
-                    );
 
     energyout += cohesive;
     energyout /= atoms;
