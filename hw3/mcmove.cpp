@@ -5,7 +5,6 @@ This performs Monete Carlo simulation
 #include <cstdlib>                // srand, rand
 
 #include "particle_energy.cpp"    // Calculate energy
-#include "energy_lj.cpp"          // Cohesive energy
 
 void mcmove(
             int         atoms,
@@ -15,6 +14,7 @@ void mcmove(
 	    long double rx[],
 	    long double ry[],
 	    long double rz[],
+            long double &cohesive,
             int         periodic,
 	    long double &energyout,
 	    int         &accept
@@ -24,26 +24,17 @@ void mcmove(
     int index = rand() % atoms;  // Index of random atom
     long double energy1 = 0.0;
     long double energy2 = 0.0;
-    long double cohesive = 0.0;
-
-    // Calculate the total energy
-    energy_lj(
-              rx,
-              ry,
-              rz,
-              l,
-              atoms,
-              periodic,
-              cohesive
-              );
+    energyout = 0.0;
+    accept = 0;
 
     // Calculate the energy of the atom
     particle_energy(rx, ry, rz, rx[index], ry[index], rz[index], index, l, atoms, periodic, energy1);
 
-    // Random Displacement
+    // Random Numbers [0, 1]
     long double random1 = (long double)rand()/(long double)(RAND_MAX);
     long double random2 = (long double)rand()/(long double)(RAND_MAX);
     long double random3 = (long double)rand()/(long double)(RAND_MAX);
+    long double randomcriterion = (long double)rand()/(long double)(RAND_MAX);
 
     // Trial move
     long double trialrx = (long double) rx[index]+(random1-0.5)*delta;
@@ -52,8 +43,6 @@ void mcmove(
 
     // Calculate the energy of the atom
     particle_energy(rx, ry, rz, trialrx, trialry, trialrz, index, l, atoms, periodic, energy2);
-
-    long double randomcriterion = (long double)rand()/(long double)(RAND_MAX);
 
     // Acceptance criterion
     if(randomcriterion < (long double) exp(-(energy2-energy1)/T))
@@ -71,7 +60,6 @@ void mcmove(
         energyout = energy1;
         accept = 0;
     }
-
-    energyout += cohesive;
-    energyout /= atoms;
+    cohesive += energyout-energy1;
+    energyout = cohesive/atoms;
 }

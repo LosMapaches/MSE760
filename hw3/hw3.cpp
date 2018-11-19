@@ -10,6 +10,9 @@ Homework 2
 #include "reduced_units.cpp"               // Reduce units
 #include "unreduced_units.cpp"             // Unreduce units
 
+#include "energy_lj.cpp"                   // Cohesive energy
+#include "pressure_lj.cpp"                 // Forces
+
 #include "mcmove.cpp"                      // Monte Carlo
 
 main()
@@ -24,7 +27,7 @@ main()
     int n = 4;                             // Number of units cells
     int atoms = n*n*n*4;                   // Number of atoms
     long double l = n*a;                   // Side length of box
-    int steps = 1e6;                       // Number of simulation steps
+    int steps = 1e3;                       // Number of simulation steps
 
     // Reduced units
     long double ared = reduced_units(m, epsilon, sigma, 1, a);
@@ -40,8 +43,8 @@ main()
     long double rz[atoms];
 
     // Energy
-    long double energyout = 0.0;
-    long double cohesive = 0.0;
+    long double energyout;
+    long double cohesive;
 
     // Atom displacement
     long double delta = 0.16;  // Beginning displacement criterion
@@ -49,22 +52,34 @@ main()
     // If move is accepted
     int accept;
     int control1 = 0;  // For the summation of acceptances
-    long double control2;  // For determining the percent acceptance
+    long double control2 = 0.0;  // For determining the percent acceptance
 
     // Coordinates for FCC lattice
     lattice_fcc(n, ared, rx, ry, rz);
 
-    srand(time(NULL));  // Generate random seed
+    // Calculate the cohesive energy
+    energy_lj(
+              rx,
+              ry,
+              rz,
+              lred,
+              atoms,
+              periodic,
+              cohesive
+              );
+
+    long double cohesivetest = 0.0;
 
     // Start Monte Carlo
+    srand(time(NULL));  // Generate random seed
+
     std::ofstream energies;
     energies.open("./energies.txt");
 
     energies << "Step AcceptanceRate Energy[eV]\n";
-    long double difference = 0.0;
     for(int i = 1; i <= steps; i++)
     {
-       	mcmove(atoms, lred, Tred, delta, rx, ry, rz, periodic, energyout, accept);
+       	mcmove(atoms, lred, Tred, delta, rx, ry, rz, cohesive, periodic, energyout, accept);
         energyout = unreduced_units(m, epsilon, sigma, 2, energyout);
 
 	control1 += accept;
@@ -78,4 +93,28 @@ main()
         energies << control2 << " ";
         energies << energyout << "\n";
     }
+
+    long double ax[atoms];
+    long double ay[atoms];
+    long double az[atoms];
+
+    // Caluclate pressure
+    long double pressure;
+    pressure_lj(
+                rx,
+                ry,
+                rz,
+                ax,
+                ay,
+                az,
+                lred,
+                Tred,
+                rhored,
+                atoms,
+                periodic,
+                pressure
+                );
+
+    printf("Pressure: %Lf", pressure);
+
 }

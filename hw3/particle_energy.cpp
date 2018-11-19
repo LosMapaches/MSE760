@@ -1,8 +1,7 @@
-/*----------------------------------------------------
-This scripts calculates the cohesive energy for a 
-system with the Lennard-Jones potential.
-Also returns the acceleration coordinates for atoms.
-----------------------------------------------------*/
+/*--------------------------------------
+This scripts calculates the energy for a 
+single particle.
+--------------------------------------*/
 
 #include <math.h>
 
