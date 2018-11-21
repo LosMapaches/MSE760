@@ -15,5 +15,19 @@ with open('./energies.txt') as file:
         energy.append(values[2])
 
 every = 1000
-pl.plot(step[::every], energy[::every], 'b.')
-pl.show()
+index1 = 400000
+index2 = 1000000
+average = sum(energy[index1:index2])/len(energy[index1:index2])
+
+pl.axvline(x=index1, color='r', label='Start of Average')
+pl.axvline(x=index2, color='r', label='End of Average')
+pl.axhline(y=average, color='y', label='Settled Average: '+str(average)[:8]+' [eV/atom]')
+
+pl.plot(step[::every], energy[::every], 'b.', label='Data Points')
+pl.ylabel('Potential Energy [eV/atom]')
+pl.legend(loc='best')
+pl.xlabel('Step [-]')
+pl.tight_layout()
+pl.grid()
+pl.savefig('part1')
+pl.clf()

@@ -119,6 +119,5 @@ void pressure_lj(
         }
     }
     vir /= 3.0;
-    long double volume = pow(l, 3.0); // Because NVT
-    pressure = rho*T+vir/volume;
+    pressure = rho*T+vir/pow(l, 3.0);
 }
