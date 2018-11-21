@@ -1,5 +1,5 @@
 /*----------------------------------------------------
-This scripts calculates the cohesive energy for a 
+This scripts calculates the pressure for a 
 system with the Lennard-Jones potential.
 Also returns the acceleration coordinates for atoms.
 ----------------------------------------------------*/
@@ -44,8 +44,6 @@ void pressure_lj(
     long double incrementax;
     long double incrementay;
     long double incrementaz;
-
-    long double vir = 0.0;
 
     // Clear acceleration values
     for(int i = 0; i < atoms; i++)
@@ -115,9 +113,10 @@ void pressure_lj(
             day = ay[i]-ax[j];
             daz = az[i]-az[j];
 
-            vir += drx*dax+dry*day+drz*daz;
+            pressure += drx*dax+dry*day+drz*daz;
         }
     }
-    vir /= 3.0;
-    pressure = rho*T+vir/pow(l, 3.0);
+    pressure /= 3.0;
+    pressure /= pow(l, 3.0);
+    pressure += rho*T;
 }
