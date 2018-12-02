@@ -15,7 +15,7 @@
 # <num> specifies how many processors in total to request. Set it as follows:
 #    Replace <num> below with 24 for morgan.q, morganshort.q
 #    Replace <num> below with 24 for izabela.q
-#$ -pe mvapich2 48
+#$ -pe mvapich2 24
 
 # request 48 hours of wall time
 # for morgan.q, max is 168 hrs; from morganshort.q, max is 24 hrs
