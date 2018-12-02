@@ -1,0 +1,103 @@
+# Written by Lane Enrique Schultz
+
+###############################################################################
+
+# Starting parameters
+units                                       metal
+atom_style                                  atomic
+dimension                                   3
+boundary                                    p p p
+
+###############################################################################
+
+# Geometric
+variable                                    side                      equal  11
+
+# Percentage
+variable                                    element                   equal  2
+variable                                    decimal                   equal  0.04
+
+# Time variables
+variable                                    mytimestep                equal  0.001
+variable                                    holdsteps                 equal  40000
+variable                                    runsteps                  equal  80000000
+
+# Temperature variables
+variable                                    ti                        equal  2000.0
+variable                                    tf                        equal  300.0
+
+# Random seed
+variable                                    seed                      equal  1597
+
+# Data output
+variable                                    mydumprate                equal  100000
+variable                                    data_file_characteristics string data.txt
+variable                                    data_file_dump_rate       string trj.lammpstrj
+variable                                    data_positions_final      string final.dat
+variable                                    data_restart              string restart.rest
+
+################################################################################
+
+# Simulation space
+lattice                                     fcc 4.04092655671750
+region                                      my_box block 0 ${side} 0 ${side} 0 ${side}
+create_box                                  2 my_box
+create_atoms                                1 box
+
+# Set the percent of atoms
+set                                         group all type/fraction ${element} ${decimal} ${seed}
+
+################################################################################
+
+# Data
+pair_style                                  eam/alloy
+pair_coeff                                  * * ../Mishin_updated-Al-Co-2013.eam.alloy Al Co
+
+################################################################################
+
+# Computed values by LAMMPS
+compute                                     mytemp      all   temp
+compute                                     mypress     all   pressure thermo_temp
+compute                                     PE          all   pe
+compute                                     KE          all   ke
+
+# Computed variables
+variable                                    myvol       equal vol
+
+################################################################################
+
+# Time step
+timestep                                    ${mytimestep}
+
+################################################################################
+
+# Save atom positions at an interval
+dump                                        my_dump_rate all custom ${mydumprate} ${data_file_dump_rate} id type xu yu zu
+dump_modify                                 my_dump_rate sort id
+
+################################################################################
+
+# Open save data
+fix                                         data_saving all ave/time 1 1 ${mydumprate} c_mytemp c_mypress v_myvol c_PE c_KE file ${data_file_characteristics}
+
+# Define the initial velocities
+velocity                                    all create ${ti} ${seed} rot yes dist gaussian
+
+# Hold as melt
+fix                                         runhold all npt temp ${ti} ${ti} 1.0 iso 0 0 1000.0
+run                                         ${holdsteps}
+unfix                                       runhold
+
+# Cool the run
+fix                                         runcool all npt temp ${ti} ${tf} 1.0 iso 0 0 1000.0
+run                                         ${runsteps}
+unfix                                       runcool
+
+# Close save data
+unfix                                       data_saving
+
+################################################################################
+
+# Data for final position and properties
+write_data                                  ${data_positions_final}
+write_restart                               ${data_restart}
