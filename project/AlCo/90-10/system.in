@@ -20,17 +20,17 @@ variable                                    decimal                   equal  0.1
 # Time variables
 variable                                    mytimestep                equal  0.001
 variable                                    holdsteps                 equal  40000
-variable                                    runsteps                  equal  80000000
+variable                                    runsteps                  equal  49750
 
 # Temperature variables
 variable                                    ti                        equal  2000.0
-variable                                    tf                        equal  300.0
+variable                                    tf                        equal  10.0
 
 # Random seed
 variable                                    seed                      equal  1597
 
 # Data output
-variable                                    mydumprate                equal  100000
+variable                                    mydumprate                equal  100
 variable                                    data_file_characteristics string data.txt
 variable                                    data_file_dump_rate       string trj.lammpstrj
 variable                                    data_positions_final      string final.dat
