@@ -1,5 +1,5 @@
 /*----------------------------------------------------
-This scripts calculates the pressure for a 
+This scripts calculates the cohesive energy for a 
 system with the Lennard-Jones potential.
 Also returns the acceleration coordinates for atoms.
 ----------------------------------------------------*/
@@ -7,23 +7,19 @@ Also returns the acceleration coordinates for atoms.
 #include <math.h>
 
 // Return the cohesive energy and accelerations of the system
-void pressure_lj(
-                 long double rx[],
-                 long double ry[],
-                 long double rz[],
-                 long double ax[],
-                 long double ay[],
-                 long double az[],
-                 long double l,
-                 long double T,
-                 long double rho,
-                 int         atoms,
-                 int         periodic,
-                 long double &pressure
-                 )
+void force_energy_lj(
+                     long double rx[],
+                     long double ry[],
+                     long double rz[],
+                     long double ax[],
+                     long double ay[],
+                     long double az[],
+                     long double l,
+                     int         atoms,
+                     int         periodic,
+                     long double &cohesive
+                     )
 {
-    pressure = 0.0;
-
     // Half lengths
     long double poshalf = l/2.0;
     long double neghalf = -poshalf;
@@ -32,18 +28,27 @@ void pressure_lj(
     long double drx;
     long double dry;
     long double drz;
-    long double dax;
-    long double day;
-    long double daz;
 
     // The distance between atoms
     long double distance;
+
+    // The energy between atoms
+    long double u;
+    cohesive = 0.0;
 
     // Acceleration
     long double acc;
     long double incrementax;
     long double incrementay;
     long double incrementaz;
+
+    // Clear acceleration values
+    for(int i = 0; i < atoms; i++)
+    {
+        ax[i] = 0.0;
+        ay[i] = 0.0;
+        az[i] = 0.0;
+    }
 
     for(int i = 0; i < atoms - 1; i++)
     {
@@ -84,15 +89,26 @@ void pressure_lj(
 
             break;
             }
+            distance = sqrt(pow(drx, 2.0)+pow(dry, 2.0)+pow(drz, 2.0));
 
-            dax = ax[i]-ax[j];
-            day = ay[i]-ax[j];
-            daz = az[i]-az[j];
+            u = 1.0/pow(distance, 12.0)-1.0/pow(distance, 6.0);
+            cohesive += u;
 
-            pressure += drx*dax+dry*day+drz*daz;
+            acc = 48.0*(1.0/pow(distance, 14.0)-0.5/pow(distance, 8.0));
+
+            // Limit the number of computations
+            incrementax = acc*drx;
+            incrementay = acc*dry;
+            incrementaz = acc*drz;
+
+            ax[i] += incrementax;
+            ay[i] += incrementay;
+            az[i] += incrementaz;
+
+            ax[j] -= incrementax;
+            ay[j] -= incrementay;
+            az[j] -= incrementaz;
         }
     }
-    pressure /= (long double) 3.0;
-    pressure /= (long double) pow(l, 3.0);
-    pressure += (long double) rho*T;
+    cohesive *= 4.0/atoms;
 }

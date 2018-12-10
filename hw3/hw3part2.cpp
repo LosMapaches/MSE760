@@ -10,8 +10,9 @@ Homework 2
 #include "reduced_units.cpp"               // Reduce units
 #include "unreduced_units.cpp"             // Unreduce units
 
+#include "force_energy_lj.cpp"             // Accelerations
 #include "energy_lj.cpp"                   // Cohesive energy
-#include "pressure_lj.cpp"                 // Forces
+#include "pressure_lj.cpp"                 // Pressures
 
 #include "mcmove.cpp"                      // Monte Carlo
 
@@ -48,8 +49,8 @@ main()
     long double az[atoms];
 
     // Energy
-    long double energyout;
-    long double cohesive;
+    long double energyout = 0.0;
+    long double cohesive = 0.0;
 
     // Pressure
     long double P = 0.0;
@@ -62,6 +63,7 @@ main()
     int accept;
     int control1 = 0;  // For the summation of acceptances
     long double control2 = 0.0;  // For determining the percent acceptance
+    long double dummy = 0.0;  // Dummy variable
 
     // Coordinates for FCC lattice
     lattice_fcc(n, ared, rx, ry, rz);
@@ -77,10 +79,9 @@ main()
               cohesive
               );
 
-    // Approximate number of steps after settling
-    int frequency = 100;
-    int count = 0;
-    int stepstart = 400000;
+    int frequency = 1000;  // The data acquisition rate
+    int count = 0;  // The number of times data is taken
+    int stepstart = 400000;  // Approximate number of steps after settling
 
     // Start Monte Carlo
     srand(time(NULL));  // Generate random seed
@@ -114,6 +115,19 @@ main()
         {
             if(i % frequency == 0)
             {
+                force_energy_lj(
+                                rx,
+                                ry,
+                                rz,
+                                ax,
+                                ay,
+                                az,
+                                lred,
+                                atoms,
+                                periodic,
+                                dummy
+                                );
+
                 pressure_lj(
                             rx,
                             ry,
@@ -137,7 +151,7 @@ main()
     }
     P = (long double) pressuresum/count;
     printf("%Lf", P);
-    P *= epsilon/pow(sigma, 3.0);
+    // P *= epsilon/pow(sigma, 3.0);
     pressures << P << "\n";
     energies.close();
     pressures.close();
