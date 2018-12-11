@@ -4,8 +4,6 @@ system with the Lennard-Jones potential.
 Also returns the acceleration coordinates for atoms.
 ----------------------------------------------------*/
 
-#include <math.h>
-
 // Return the cohesive energy and accelerations of the system
 void force_energy_lj(
                      long double rx[],
@@ -15,32 +13,41 @@ void force_energy_lj(
                      long double ay[],
                      long double az[],
                      long double l,
+                     long double T,
+                     long double rho,
                      int         atoms,
                      int         periodic,
-                     long double &cohesive
+                     long double &cohesive,
+                     long double &pressure
                      )
 {
+    // Pressure 
+    cohesive = 0.0;
+    pressure = 0.0;
+
     // Half lengths
     long double poshalf = l/2.0;
     long double neghalf = -poshalf;
 
     // The difference between vectors
-    long double drx;
-    long double dry;
-    long double drz;
+    long double drx = 0.0;
+    long double dry = 0.0;
+    long double drz = 0.0;
 
     // The distance between atoms
-    long double distance;
+    long double distance = 0.0;
 
     // The energy between atoms
-    long double u;
-    cohesive = 0.0;
+    long double u = 0.0;
 
     // Acceleration
-    long double acc;
-    long double incrementax;
-    long double incrementay;
-    long double incrementaz;
+    long double acc = 0.0;
+    long double dax = 0.0;
+    long double day = 0.0;
+    long double daz = 0.0;
+    long double incrementax = 0.0;
+    long double incrementay = 0.0;
+    long double incrementaz = 0.0;
 
     // Clear acceleration values
     for(int i = 0; i < atoms; i++)
@@ -108,7 +115,17 @@ void force_energy_lj(
             ax[j] -= incrementax;
             ay[j] -= incrementay;
             az[j] -= incrementaz;
+
+            dax = ax[i]-ax[j];
+            day = ay[i]-ay[j];
+            daz = az[i]-az[j];
+
+            pressure += (long double) drx*dax+dry*day+drz*daz;
         }
     }
     cohesive *= 4.0/atoms;
+
+    pressure /= 3.0;
+    pressure /= pow(l, 3.0);
+    pressure += rho*T;
 }

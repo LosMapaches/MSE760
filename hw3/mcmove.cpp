@@ -14,8 +14,8 @@ void mcmove(
 	    long double rx[],
 	    long double ry[],
 	    long double rz[],
-            long double &cohesive,
             int         periodic,
+            long double &cohesive,
 	    long double &energyout,
 	    int         &accept
 	    )
