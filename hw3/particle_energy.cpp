@@ -3,8 +3,6 @@ This scripts calculates the energy for a
 single particle.
 --------------------------------------*/
 
-#include <math.h>
-
 // Return the cohesive energy and accelerations of the system
 void particle_energy(
                      long double rx[],
@@ -39,7 +37,7 @@ void particle_energy(
     {
         // Skip the starting atom
 	if(index == i)
-	    i++;
+	    continue;
 
         switch(periodic)
         {
@@ -74,7 +72,7 @@ void particle_energy(
 
         break;
         }
-        distance = sqrt(pow(drx, 2.0)+pow(dry, 2.0)+pow(drz, 2.0));
+        distance = sqrt(drx*drx+dry*dry+drz*drz);
         energy += 1.0/pow(distance, 12.0)-1.0/pow(distance, 6.0);
     }
     energy *= 4.0;

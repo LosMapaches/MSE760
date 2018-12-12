@@ -2,8 +2,6 @@
 This script unreduces the units of the problem
 ----------------------------------------------------*/
 
-#include <math.h>                           // square root
-
 // Return standard units 
 long double unreduced_units(
                             long double m,

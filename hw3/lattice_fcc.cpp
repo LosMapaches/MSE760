@@ -5,7 +5,6 @@ This script creates an fcc lattice in 3D
 // Return the x, y, and z coordinates of atoms in FCC
 void lattice_fcc(
                  int n,
-                 int atoms,
                  long double a,
                  long double rx[],
                  long double ry[],
@@ -13,6 +12,9 @@ void lattice_fcc(
                  )
 {
     int initialatoms = 4;                  // The number of attoms in one unit cell
+    int dimensions = 3;                    // The dimensions in space
+    const int size = 2*n;                  // The size of the arrays
+    int atoms = initialatoms*n*n*n;        // The number of atoms
 
     // First four atoms
     long double rxi[] = {a*0.0, a*0.5, a*0.5, a*0.0};

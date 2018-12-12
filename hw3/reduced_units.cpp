@@ -2,8 +2,6 @@
 This script reduces the units of the problem
 ----------------------------------------------------*/
 
-#include <math.h>                           // square root
-
 // Return the reduced unit
 long double reduced_units(
                           long double m,

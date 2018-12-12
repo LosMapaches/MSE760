@@ -2,9 +2,7 @@
 This performs Monete Carlo simulation
 ----------------------------------------------------*/
 
-#include <cstdlib>                // srand, rand
-
-#include "particle_energy.cpp"    // Calculate energy
+#include "particle_energy.cpp"             // Atom Energy
 
 void mcmove(
             int         atoms,
@@ -14,8 +12,8 @@ void mcmove(
 	    long double rx[],
 	    long double ry[],
 	    long double rz[],
-            int         periodic,
             long double &cohesive,
+            int         periodic,
 	    long double &energyout,
 	    int         &accept
 	    )
