@@ -142,8 +142,8 @@ main()
     P = pressuresum/count;
     printf("Pressure virial: %Lf \n", P);
     printf("Pressure ideal: %Lf \n", rhored*Tred);
-    // P *= epsilon/pow(sigma, 3.0);
-    pressures << P;
+    // P *= epsilon/pow(sigma, 3.0)
+    pressures << P << "\n";
     pressures << rhored*Tred << "\n";
     energies.close();
     pressures.close();

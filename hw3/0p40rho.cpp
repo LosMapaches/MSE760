@@ -92,7 +92,7 @@ main()
     energies.open("./0p40rho_energies.txt");
 
     std::ofstream pressures;
-    pressures.open("./0P40rho_pressures.txt");
+    pressures.open("./0p40rho_pressures.txt");
 
     energies << "Step AcceptanceRate Energy[eV/atom]\n";
     pressures << "Pressure_virial Pressure_ideal\n";
@@ -143,7 +143,7 @@ main()
     printf("Pressure virial: %Lf \n", P);
     printf("Pressure ideal: %Lf \n", rhored*Tred);
     // P *= epsilon/pow(sigma, 3.0);
-    pressures << P;
+    pressures << P "\n";
     pressures << rhored*Tred << "\n";
     energies.close();
     pressures.close();
