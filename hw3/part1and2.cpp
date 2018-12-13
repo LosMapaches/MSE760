@@ -10,26 +10,26 @@ Homework 3
 #include "lattice_fcc.cpp"                 // FCC coordinates
 #include "reduced_units.cpp"               // Reduce units
 #include "unreduced_units.cpp"             // Unreduce units
-#include "force_lj.cpp"                    // Accelerations
-#include "energy_lj.cpp"                   // Cohesive energy
-#include "pressure_lj.cpp"                 // Pressures
+#include "force_energy_lj.cpp"             // Forces and potential energy
 #include "mcmove.cpp"                      // Monte Carlo
 
 main()
 {
+    long double dummy = 0.0;               // Dummy variable to store useless data
     long double m = 6.6e-26;               // Mass [-/atom]
     long double sigma = 3.4e-10;           // Length [m]
     long double epsilon = 0.0104;          // Energy [eV]
     long double k = 8.6173303e-5;          // Boltzmann constant [eV/K]
 
-    int n = 3;                             // Number of units cells
+    int n = 5;                             // Number of units cells
     int atoms = n*n*n*4;                   // Number of atoms
     int steps = 1e6;                       // Number of simulation steps
 
     // Reduced units
     long double Tred = 2.0;
     long double rhored = 0.84;             // Reduced density
-    long double lred = cbrt(atoms/rhored);
+    long double vred = atoms/rhored;
+    long double lred = cbrt(vred);
     long double ared = lred/n;
 
     int periodic = 1;  // Turn on periodic boundry conditions
@@ -49,7 +49,7 @@ main()
     long double cohesive = 0.0;
 
     // Pressure
-    long double P = 0.0;
+    long double P;
     long double pressuresum = 0.0;
 
     // Atom displacement
@@ -64,15 +64,22 @@ main()
     lattice_fcc(n, ared, rx, ry, rz);
 
     // Calculate the cohesive energy
-    energy_lj(
-              rx,
-              ry,
-              rz,
-              lred,
-              atoms,
-              periodic,
-              cohesive
-              );
+    force_energy_lj(
+                    rx,
+                    ry,
+                    rz,
+                    ax,
+                    ay,
+                    az,
+                    lred,
+                    Tred,
+                    rhored,
+                    vred,
+                    atoms,
+                    periodic,
+                    cohesive,
+                    dummy
+                    );
 
     int frequency = 100;  // The data acquisition rate
     int count = 0;  // The number of times data is taken
@@ -110,40 +117,30 @@ main()
         {
             if(i % frequency == 0)
             {
-                force_lj(
-                         rx,
-                         ry,
-                         rz,
-                         ax,
-                         ay,
-                         az,
-                         lred,
-                         atoms,
-                         periodic
-                         );
-
-                pressure_lj(
-                            rx,
-                            ry,
-                            rz,
-                            ax,
-                            ay,
-                            az,
-                            lred,
-                            Tred,
-                            rhored,
-                            atoms,
-                            periodic,
-                            P
-                            );
+                force_energy_lj(
+                                rx,
+                                ry,
+                                rz,
+                                ax,
+                                ay,
+                                az,
+                                lred,
+                                Tred,
+                                rhored,
+                                vred,
+                                atoms,
+                                periodic,
+                                dummy,
+                                P
+                                );
 
                 pressuresum += P;
                 count++;
             }
         }
     }
-    P = pressuresum/(long double)count;
-    printf("%Lf", P);
+    P = pressuresum/count;
+    printf("Pressutre: %Lf", P);
     // P *= epsilon/pow(sigma, 3.0);
     pressures << P << "\n";
     energies.close();

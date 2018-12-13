@@ -18,6 +18,9 @@ void particle_energy(
                      long double &energy
                      )
 {
+    // The energy between atoms
+    energy = 0.0;
+
     // Half lengths
     long double poshalf = l/2.0;
     long double neghalf = -poshalf;
@@ -29,9 +32,6 @@ void particle_energy(
 
     // The distance between atoms
     long double distance;
-
-    // The energy between atoms
-    energy = 0.0;
 
     for(int i = 0; i < atoms; i++)
     {

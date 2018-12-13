@@ -4,17 +4,29 @@ system with the Lennard-Jones potential.
 Also returns the acceleration coordinates for atoms.
 ----------------------------------------------------*/
 
+#include <math.h>
+
 // Return the cohesive energy and accelerations of the system
-void energy_lj(
-               long double rx[],
-               long double ry[],
-               long double rz[],
-               long double l,
-               int         atoms,
-               int         periodic,
-               long double &cohesive
-               )
+void force_energy_lj(
+                     long double rx[],
+                     long double ry[],
+                     long double rz[],
+                     long double ax[],
+                     long double ay[],
+                     long double az[],
+                     long double l,
+                     long double T,
+                     long double rho,
+                     long double v,
+                     int         atoms,
+                     int         periodic,
+                     long double &energy,
+                     long double &pressure
+                     )
 {
+    // Reset pressure
+    pressure = 0.0;
+
     // Half lengths
     long double poshalf = l/2.0;
     long double neghalf = -poshalf;
@@ -28,7 +40,22 @@ void energy_lj(
     long double distance;
 
     // The energy between atoms
-    cohesive = 0.0;
+    long double u;
+    energy = 0.0;
+
+    // Acceleration
+    long double acc;
+    long double incrementax;
+    long double incrementay;
+    long double incrementaz;
+
+    // Clear acceleration values
+    for(int i = 0; i < atoms; i++)
+    {
+        ax[i] = 0.0;
+        ay[i] = 0.0;
+        az[i] = 0.0;
+    }
 
     for(int i = 0; i < atoms - 1; i++)
     {
@@ -70,8 +97,31 @@ void energy_lj(
             break;
             }
             distance = sqrt(pow(drx, 2.0)+pow(dry, 2.0)+pow(drz, 2.0));
-            cohesive += 1.0/pow(distance, 12.0)-1.0/pow(distance, 6.0);
+
+            u = 1.0/pow(distance, 12.0)-1.0/pow(distance, 6.0);
+            energy += u;
+
+            acc = 48.0*(1.0/pow(distance, 14.0)-0.5/pow(distance, 8.0));
+
+            // Limit the number of computations
+            incrementax = acc*drx;
+            incrementay = acc*dry;
+            incrementaz = acc*drz;
+
+            ax[i] += incrementax;
+            ay[i] += incrementay;
+            az[i] += incrementaz;
+
+            ax[j] -= incrementax;
+            ay[j] -= incrementay;
+            az[j] -= incrementaz;
+
+            pressure += distance*acc;
         }
     }
-    cohesive *= 4.0;
+    energy *= 4.0;
+
+    pressure /= 3.0;
+    pressure /= v;
+    pressure += rho*T;
 }

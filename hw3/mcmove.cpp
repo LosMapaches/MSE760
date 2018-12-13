@@ -20,10 +20,8 @@ void mcmove(
 
 {
     int index = rand() % atoms;  // Index of random atom
-    long double energy1 = 0.0;
-    long double energy2 = 0.0;
-    energyout = 0.0;
-    accept = 0;
+    long double energy1;
+    long double energy2;
 
     // Calculate the energy of the atom
     particle_energy(rx, ry, rz, rx[index], ry[index], rz[index], index, l, atoms, periodic, energy1);
@@ -35,9 +33,9 @@ void mcmove(
     long double randomcriterion = (long double)rand()/(long double)(RAND_MAX);
 
     // Trial move
-    long double trialrx = (long double) rx[index]+(random1-0.5)*delta;
-    long double trialry = (long double) ry[index]+(random2-0.5)*delta;
-    long double trialrz = (long double) rz[index]+(random3-0.5)*delta;
+    long double trialrx = rx[index]+(random1-0.5)*delta;
+    long double trialry = ry[index]+(random2-0.5)*delta;
+    long double trialrz = rz[index]+(random3-0.5)*delta;
 
     // Calculate the energy of the atom
     particle_energy(rx, ry, rz, trialrx, trialry, trialrz, index, l, atoms, periodic, energy2);
