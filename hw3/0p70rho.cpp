@@ -92,7 +92,7 @@ main()
     energies.open("./0p70rho_energies.txt");
 
     std::ofstream pressures;
-    pressures.open("./0P70rho_pressures.txt");
+    pressures.open("./0p70rho_pressures.txt");
 
     energies << "Step AcceptanceRate Energy[eV/atom]\n";
     pressures << "Pressure_virial Pressure_ideal\n";
